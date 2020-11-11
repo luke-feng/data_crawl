@@ -1,80 +1,185 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import sys
+import os
+import xlwt
+import tqdm
+import fiscal_advisors as fa
 
-localFile = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/html/Grant Street Group - Results - CDs.html'
 
-
-def get_urls_from_file(localFile):
-    titleLink = []
-    localHtml = open(localFile, 'r', encoding='utf-8')
-    htmlHandle = localHtml.read()
-    htmlHandle = htmlHandle.replace('&amp;', '&')
-    htmlHandle = htmlHandle.replace('&nbsp;', ' ')
-    soup = BeautifulSoup(htmlHandle, 'lxml')
+def get_results_page_info(webPage, fileName, dataFilePath):
+    summaryLinks = []
+    termLinks = []
+    soup = BeautifulSoup(webPage, 'lxml')
     trs = soup.select(
         'body>#container>#subpagecontent>#datatable_wrapper>#datatable>tbody>tr')
+    count = len(trs)
     tc = 0
-    for tr in trs:
-        title = tr.find("td", "title").find('a')
-        if title is not None:
-            link = title['href']
-            titleLink.append(link)
-            tc += 1
-        else:
-            titleLink.append(' ')
-    print("There are {} links".format(tc))
-    return titleLink
-
-def write_links_to_file(path):
-    link_file = path+'link.txt'
-    with open(link_file, 'w') as out:
-        titleLink = get_urls_from_file(localFile)
-        for i in range(0, len(titleLink)):
-            out.write('link \t' + titleLink[i]+'\n')
-    out.close()
-
-def get_page(url):
-    try:
-        webPage = requests.get(url)
-    except requests.ConnectionError:
-        print("Can't connect to the site, sorry")
-    else:
-        page = webPage.text
-        page = page.replace('</br>', '\n')
-        page = page.replace('&amp;', '&')
-        page = page.replace('&nbsp;', ' ')
-        return page
-
-
-def get_file_name(url):
-    matchObj = re.match(r'(.*?)results/(.*?)/bid_summary', url, re.M | re.I)
-    if matchObj:
-        return matchObj.group(2)
-    else:
-        print('get name error')
-
-
-def get_text(url):
-    page = get_page(url)
-    soup = BeautifulSoup(page, 'lxml')
-    text = soup.get_text(separator='\n', strip=True)
-    return text
-
-
-def write_text_to_file(path):
-    titleLink = get_urls_from_file(localFile)
-    for i in range(0, len(titleLink)):
-        if titleLink[i] is not ' ':
-            fm = get_file_name(titleLink[i])
-            fileName = path + fm + '_summary.txt'
-            with open(fileName, 'w') as sumOut:
-                summary = get_text(titleLink[i])
+    ic = 0
+    with open(fileName, 'w') as out:
+        out.write('Id'+'\t'+'Auction_Name'+'\t'+'Date'+'\t'+'Principal'+'\t'+'Issuer'+'\t' +
+                  'State'+'\t'+'Site'+'\t'+'Description'+'\t'+'Summary_link'+'\n')
+        par = tqdm.tqdm(total=count)
+        for tr in trs:
+            par.update(1)
+            Id = tr['id']
+            date = tr.find("td", "date sorting_1").get_text()
+            principal = tr.find("td", "principal").get_text()
+            state = tr.find("td", "state").get_text()
+            site = tr.find("td", "site").get_text()
+            description = tr.find("td", "description").get_text()
+            title = tr.find("td", "title").find('a')
+            issuer = title.get_text()
+            summaryLink = title['href']
+            summaryLinks.append(summaryLink)
+            fileTitle = fa.get_file_name(summaryLink)
+            summaryName = dataFilePath + fileTitle + '_summary.txt'
+            with open(summaryName, 'w') as sumOut:
+                summary = fa.get_text(summaryLink)
                 sumOut.write(summary)
                 sumOut.close()
-            
+            tc += 1
+            out.write(Id+'\t'+fileTitle+'\t'+date+'\t'+principal+'\t'+issuer+'\t' +
+                      state+'\t'+site+'\t'+description+'\t'+summaryLink+'\n')
+        out.close()
+    print("There are {} links in total.".format(tc))
+    return summaryLinks, termLinks
 
-linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/html/'
-write_links_to_file(linkFilePath)
-dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/text/'
-write_text_to_file(dataFilePath)
+
+def get_summary(fileTitle, dataFilePath, localTextFile):
+    allValue = dict()
+    fileName = dataFilePath+fileTitle+'_summary.txt'
+    allValue['auctionDate'] = ''
+    allValue['auctionTypes'] = ''
+    allValue['auctionStart'] = ''
+    allValue['auctionEnd'] = ''
+    allValue['auctionLastUpdate'] = ''
+    allValue['auctionStatus'] = ''
+    allValue['notice'] = ''
+    allValue['principal'] = ''
+    allValue['issuer'] = ''
+    allValue['description'] = ''
+    allValue['inTheMoney'] = ''
+    allValue['outOfTheMoney'] = ''
+
+    if fileName in localTextFile:
+        text = localTextFile[fileName]
+        for line in text:
+            currentIndex = text.index(line)
+            line = line.strip()
+            if line == 'Auction Status':
+                auctionDate = text[currentIndex+1]
+                allValue['auctionDate'] = auctionDate
+                types = text[currentIndex+2]
+                allValue['auctionTypes'] = types
+                start = text[currentIndex+3]
+                allValue['auctionStart'] = start
+                end = text[currentIndex+4]
+                allValue['auctionEnd'] = end
+                lastUpdate = text[currentIndex+5]
+                allValue['auctionLastUpdate'] = lastUpdate
+                status = text[currentIndex+6]
+                allValue['auctionStatus'] = status
+                if text[currentIndex+7] == 'NOTICE:':
+                    notice = 'NOTICE: '+text[currentIndex+8]
+                    allValue['notice'] = notice
+                    principal = text[currentIndex+9]
+                    allValue['principal'] = principal
+                    issuer = text[currentIndex+10]
+                    allValue['issuer'] = issuer
+                    i = currentIndex + 11
+                    description = ''
+                    while text[i].startswith('IN-THE-MONEY') is False:
+                        description = description+text[i]+'\n'
+                        i += 1
+                    allValue['description'] = description
+                if text[currentIndex+7].startswith('$'):
+                    principal = text[currentIndex+7]
+                    allValue['principal'] = principal
+                    issuer = text[currentIndex+8]
+                    allValue['issuer'] = issuer
+                    i = currentIndex + 9
+                    description = ''
+                    while text[i].startswith('IN-THE-MONEY') is False:
+                        description = description+text[i]+'\n'
+                        i += 1
+                    allValue['description'] = description
+
+            elif line == 'IN-THE-MONEY':
+                i = currentIndex+1
+                j = 0
+                form = 'IN-THE-MONEY\n'
+                while 'OUT-OF-THE-MONEY' not in text[i]:
+                    if j % 6 == 0:
+                        form = form+'\n'+text[i]
+                        j += 1
+                    elif (text[i].startswith('(')) or (text[i].startswith('Amount')):
+                        form = form+' '+text[i]
+                    else:
+                        form = form+'| '+text[i]
+                        j += 1
+                    i += 1
+                allValue['inTheMoney'] = form
+            elif line == 'OUT-OF-THE-MONEY':
+                i = currentIndex+1
+                j = 0
+                form = 'OUT-OF-THE-MONEY\n'
+                while 'Click below to' not in text[i]:
+                    if j % 6 == 0:
+                        form = form+'\n'+text[i]
+                        j += 1
+                    elif (text[i].startswith('(')) or (text[i].startswith('Amount')):
+                        form = form+' '+text[i]
+                    else:
+                        form = form+'| '+text[i]
+                        j += 1
+                    i += 1
+                allValue['outOfTheMoney'] = form
+    return allValue
+
+
+def writeFianlResults(resultPageFile, dataFilePath, outputFile):
+    localTextFile = fa.get_all_local_text(dataFilePath)
+    xlsFile = xlwt.Workbook()
+    sheet1 = xlsFile.add_sheet('results', cell_overwrite_ok=True)
+
+    header = ['Id', 'Auction Name', 'Date', 'Principal', 'Issuer', 'State', 'Site', 'Description', 'Summary link',
+              'Auction Date', 'Auction Types', 'Auction Start', 'Auction End', 'Auction Last Update', 'Auction Status',
+              'Auction Notice', 'Auction Principal', 'Auction Issuer', 'Auction Description',  'IN-THE-MONEY', 'OUT-OF-THE-MONEY']
+
+    for i in range(0, len(header)):
+        sheet1.write(0, i, header[i])
+
+    with open(resultPageFile, 'r') as rp:
+        i = 1
+        par = tqdm.tqdm()
+        for line in rp:
+            par.update(1)
+            tokens = line.split('\t')
+            fileTitle = tokens[1]
+            allValue = get_summary(
+                fileTitle, dataFilePath, localTextFile)
+            if tokens[0].startswith('Id') is False:
+                for col in range(0, len(tokens)):
+                    sheet1.write(i, col, tokens[col])
+                col = len(tokens)
+                for v in allValue:
+                    sheet1.write(i, col, allValue[v])
+                    col += 1
+                i += 1
+    xlsFile.save(outputFile)
+
+def main():
+    linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/html/'
+    dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/text/'
+    url = 'https://auctions.grantstreet.com/results/cd'
+    webPage = fa.get_all_trs(url)
+    resultPageFile = linkFilePath+'results_page_info.tsv'
+    get_results_page_info(webPage, resultPageFile, dataFilePath)
+    outputFile = linkFilePath + 'final_cds.xls'
+    writeFianlResults(resultPageFile, dataFilePath, outputFile)
+
+
+if __name__ == "__main__":
+    main()
