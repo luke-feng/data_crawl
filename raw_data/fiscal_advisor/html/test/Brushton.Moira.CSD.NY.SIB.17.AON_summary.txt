@@ -1,0 +1,94 @@
+MuniAuction: AON Auction Results: Brushton.Moira.CSD.NY.SIB.17.AON
+Auction Date
+Thu., Jan 5, 2017
+Type
+AON
+Start
+var auction_start_time = 1483630200000;
+10:30:00 am
+End
+var auction_end_time = 1483632000000;
+11:00:00 am
+Last Update
+11:03:10 am
+EST
+Status
+Over
+$328,825
+Brushton-Moira Central School District, Franklin County, New York
+Statutory Installment Bond, 2017
+Bidder
+Firm
+NIC
+Time
+Gross Interest
++ Discount/
+(Premium)
+Total Interest
+1st
+GREE-DM
+The Bank of Greene County
+2.790000%
+10:31:07 am
+$26,236.25
+(0.00)
+$26,236.25
+2nd
+ROOS-GF
+Roosevelt & Cross
+3.000000%
+10:49:57 am
+$28,211.02
+(0.00)
+$28,211.02
+Note:
+May not include sealed bids 
+						received outside of MuniAuction 
+						system.
+Click below to see other bidder results
+AON bids:
+GREE-DM
+,
+ROOS-GF
+,
+ROOS-MB
+,
+ROOS-ST
+,
+Best Bid
+,
+Cover Bid
+function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+Go to:
+function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Brushton%2EMoira%2ECSD%2ENY%2ESIB%2E17%2EAON","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+Terms
+,
+Notice of Sale
+,
+Rules
+(modified 5/13/2008 @ 7:26 pm)
+,
+Selections
+,
+Results
+Exit to:
+Home Page
+For assistance, call MuniAuction at (412) 391-5555 x370.
+Please direct questions and comments regarding bidding procedures to the
+Auction Administrator
+or call (412) 391-5555.
+Copyright © 1997-2017 Grant Street Group. All rights reserved.
+Grant Street Group's auction services are protected by
+U.S. Patent Nos.
+6,161,099
+,
+7,523,063
+, and patents pending.

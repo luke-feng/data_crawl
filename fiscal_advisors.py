@@ -143,8 +143,16 @@ def get_encode_patten(site, fileTitle, dataFilePath, localTextFile):
     patten3 = ['DainRauscherAuction']
     patten4 = ['PGHauction']
     patten5 = ['FiscalAdvisorsAuction']
+    patten7 = ['UnivSystemOfMaryland.RevBonds.1999B.AON', 'AvonGroveSD.GOs.Series1999.AON', 'MiltonAreaSD.Series1999.AON',
+               'HillsboroughCounty.Series1999.AON', 'NorthernYorkSD.Series1999.AON', 'LancasterSD.Series1999.AON',
+               'LigonierValleySD.SeriesB1999.MBM', 'LigonierValleySD.SeriesA1999.AON', 'FranklinRegionalSD.Series1999.AON',
+               'CrawfordCounty.GOs.Series1999.AON', 'CheltenhamSD.Series1999.AON', 'Monroeville.GOs.1999.AON']
     allValue = dict()
-    if site in patten1:
+    if fileTitle == 'Montgomery.ASD.GOs.01.MBM':
+        allValue = get_results_patten6(fileTitle, dataFilePath, localTextFile)
+    elif fileTitle in patten7:
+        allValue = get_results_patten7(fileTitle, dataFilePath, localTextFile)
+    elif site in patten1:
         allValue = get_results_patten1(fileTitle, dataFilePath, localTextFile)
     elif site in patten2:
         allValue = get_results_patten2(fileTitle, dataFilePath, localTextFile)
@@ -245,7 +253,7 @@ def get_term_result(allValue, termName, localTextFile):
             elif line == 'Type':
                 i = currentIndex+2
                 termType = ''
-                while tText[i].startswith('Rating') is False:
+                while tText[i].startswith('Bank') is False and tText[i].startswith('Sale Date'):
                     termType = termType + tText[i] + '\n'
                     i += 1
                 allValue['termType'] = termType
@@ -321,7 +329,11 @@ def get_term_result(allValue, termName, localTextFile):
                 i = currentIndex+1
                 termBondCounsel = ''
                 while tText[i].startswith('Web') is False:
-                    termBondCounsel = termBondCounsel + tText[i] + '\n'
+                    if tText[i].startswith('Terms as of'):
+                        termBondCounsel = ''
+                        break
+                    else:
+                        termBondCounsel = termBondCounsel + tText[i] + '\n'
                     i += 1
                 allValue['termBondCounsel'] = termBondCounsel
             elif line.startswith('Web'):
@@ -392,26 +404,26 @@ def get_results_patten1(fileTitle, dataFilePath, localTextFile):
                 allValue['issuer'] = issuer
                 i = currentIndex + 3
                 description = ''
-                while text[i].startswith('Bidder') is False:
+                while text[i].startswith('Bidder') is False and text[i].startswith('Best MBM') is False:
                     description = description+text[i]+'\n'
                     i += 1
                 allValue['description'] = description
             elif line == 'Bidder':
                 i = currentIndex
                 form = ''
-                while '*Preliminary' not in text[i]:
+                while '*Preliminary' not in text[i] and 'Click below' not in text[i] and 'Bid not'not in text[i]:
                     if text[i] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i]) is not None:
                         form = form+'\n'+text[i]
                     else:
                         form = form+'| '+text[i]
                     i += 1
                 allValue['form'] = form
-            elif line.startswith('*Preliminary'):
+            elif line.startswith('*Preliminary') or line.startswith('*Bid not'):
                 statement = text[currentIndex]
                 i = 1
-                while 'Click below to see other bidder results' not in text[currentIndex+i]:
+                while 'Click below to see other bidder results' not in text[currentIndex+i] and 'Go to:' not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
-                        statement = statement+'\n'+text[currentIndex]
+                        statement = statement+'\n'+text[currentIndex+i]
                     i += 1
                 allValue['statement'] = statement
         allValue = get_term_result(allValue, termName, localTextFile)
@@ -504,7 +516,7 @@ def get_results_patten2(fileTitle, dataFilePath, localTextFile):
                 i = 1
                 while 'Click below to see other bidder results' not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
-                        statement = statement+'\n'+text[currentIndex]
+                        statement = statement+'\n'+text[currentIndex+i]
                     i += 1
                 allValue['statement'] = statement
         allValue = get_term_result(allValue, termName, localTextFile)
@@ -597,7 +609,7 @@ def get_results_patten3(fileTitle, dataFilePath, localTextFile):
                 i = 1
                 while 'Click below to see other bidder results' not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
-                        statement = statement+'\n'+text[currentIndex]
+                        statement = statement+'\n'+text[currentIndex+i]
                     i += 1
                 allValue['statement'] = statement
         allValue = get_term_result(allValue, termName, localTextFile)
@@ -664,7 +676,7 @@ def get_results_patten4(fileTitle, dataFilePath, localTextFile):
                 i = 1
                 while 'Click below to see other bidder results' not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
-                        statement = statement+'\n'+text[currentIndex]
+                        statement = statement+'\n'+text[currentIndex+i]
                     i += 1
                 allValue['statement'] = statement
         allValue = get_term_result(allValue, termName, localTextFile)
@@ -672,6 +684,90 @@ def get_results_patten4(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_patten5(fileTitle, dataFilePath, localTextFile):
+    allValue = init_results_value()
+    fileName = dataFilePath+fileTitle+'_summary.txt'
+    termName = dataFilePath+fileTitle+'_terms.txt'
+    if fileName in localTextFile:
+        text = localTextFile[fileName]
+        for line in text:
+            currentIndex = text.index(line)
+            line = line.strip()
+            if line == 'Auction Date':
+                auctionDate = text[currentIndex+1]
+                allValue['auctionDate'] = auctionDate
+            elif line == 'Type':
+                types = text[currentIndex+1]
+                allValue['types'] = types
+            elif line == 'Start':
+                start = text[currentIndex+2]
+                allValue['start'] = start
+            elif line == 'End':
+                end = text[currentIndex+2]
+                allValue['end'] = end
+            elif line == 'Last Update':
+                lastUpdate = text[currentIndex+1]
+                allValue['lastUpdate'] = lastUpdate
+            elif line == 'Status':
+                status = text[currentIndex+1]
+                allValue['status'] = status
+                if text[currentIndex+2] == 'NOTICE:':
+                    notice = 'NOTICE: '+text[currentIndex+3]
+                    allValue['notice'] = notice
+                    principal = text[currentIndex+4]
+                    allValue['principal'] = principal
+                    issuer = text[currentIndex+5]
+                    allValue['issuer'] = issuer
+                    i = currentIndex + 6
+                    description = ''
+                    while text[i].startswith('Bidder') is False:
+                        description = description+text[i]+'\n'
+                        i += 1
+                    allValue['description'] = description
+                else:
+                    principal = text[currentIndex+2]
+                    allValue['principal'] = principal
+                    issuer = text[currentIndex+3]
+                    allValue['issuer'] = issuer
+                    i = currentIndex + 4
+                    description = ''
+                    while text[i].startswith('Bidder') is False:
+                        description = description+text[i]+'\n'
+                        i += 1
+                    allValue['description'] = description
+            elif line.startswith('Auction Closed At:'):
+                auctionClosed = text[currentIndex]
+                allValue['auctionClosedNotice'] = auctionClosed
+                bestAONBidder = text[currentIndex+2]
+                bestAONTIC = text[currentIndex+3]
+                allValue['bestAONBidder'] = bestAONBidder
+                allValue['bestAONTIC'] = bestAONTIC
+            elif line == 'Bidder':
+                i = currentIndex
+                form = ''
+                while 'Note:' not in text[i] and 'Bid not submitted' not in text[i] and 'Click below ' not in text[i]:
+                    if text[i] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i]) is not None:
+                        form = form+'\n'+text[i]
+                    else:
+                        form = form+'| '+text[i]
+                    i += 1
+                allValue['form'] = form
+            elif line.startswith('1st'):
+                bestAONBidder = text[currentIndex+2]
+                bestAONTIC = text[currentIndex+3]
+                allValue['bestAONBidder'] = bestAONBidder
+                allValue['bestAONTIC'] = bestAONTIC
+            elif line.startswith('Note:') or line.startswith('†'):
+                note = text[currentIndex]
+                i = 1
+                while 'Click below to see other bidder results' not in text[currentIndex+i]:
+                    note = note + ' '+text[currentIndex+i]
+                    i += 1
+                allValue['note'] = note
+        allValue = get_term_result(allValue, termName, localTextFile)
+    return allValue
+
+
+def get_results_patten6(fileTitle, dataFilePath, localTextFile):
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -713,9 +809,13 @@ def get_results_patten5(fileTitle, dataFilePath, localTextFile):
                     description = description+text[i]+'\n'
                     i += 1
                 allValue['description'] = description
-            elif line.startswith('Best MBM TIC:'):
-                bestMBMTIC = text[currentIndex+1]
+            elif line.startswith('Best AON Bidder:'):
+                bestMBMTIC = text[currentIndex+2] + ' '+text[currentIndex+3]
                 allValue['bestMBMTIC'] = bestMBMTIC
+                bestAONTIC = text[currentIndex+4] + ' '+text[currentIndex+5]
+                bestAONBidder = text[currentIndex+6] + ' '+text[currentIndex+7]
+                allValue['bestAONBidder'] = bestAONBidder
+                allValue['bestAONTIC'] = bestAONTIC
             elif line == 'Sep 1, 2002':
                 i = 0
                 form = 'Due| Principal Amount*| Coupon| Purchas| Price| Purchase Yield| MBM Winner**| Time'
@@ -731,7 +831,77 @@ def get_results_patten5(fileTitle, dataFilePath, localTextFile):
                 i = 1
                 while 'Click below to see other bidder results' not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
-                        statement = statement+'\n'+text[currentIndex]
+                        statement = statement+'\n'+text[currentIndex+i]
+                    i += 1
+                allValue['statement'] = statement
+        allValue = get_term_result(allValue, termName, localTextFile)
+    return allValue
+
+def get_results_patten6(fileTitle, dataFilePath, localTextFile):
+    allValue = init_results_value()
+    fileName = dataFilePath+fileTitle+'_summary.txt'
+    termName = dataFilePath+fileTitle+'_terms.txt'
+    if fileName in localTextFile:
+        text = localTextFile[fileName]
+        for line in text:
+            currentIndex = text.index(line)
+            line = line.strip()
+            if line == 'Auction Status':
+                auctionDate = text[currentIndex+1]
+                allValue['auctionDate'] = auctionDate
+                types = text[currentIndex+2]
+                allValue['types'] = types
+                start = text[currentIndex+3]
+                allValue['start'] = start
+                end = text[currentIndex+4]
+                allValue['end'] = end
+                lastUpdate = text[currentIndex+5]
+                allValue['lastUpdate'] = lastUpdate
+                status = text[currentIndex+6]
+                allValue['status'] = status
+            elif line.startswith('Auction Closed At:'):
+                auctionClosed = text[currentIndex]
+                allValue['auctionClosedNotice'] = auctionClosed
+            elif line == 'NOTICE:':
+                notice = 'NOTICE: '+text[currentIndex+1]
+                allValue['notice'] = notice
+            elif line == 'Note:':
+                note = 'Note: '+text[currentIndex+1]
+                allValue['note'] = note
+            elif re.match(r'\$\d*', line) is not None and text[currentIndex+1] == '*':
+                principal = text[currentIndex]
+                allValue['principal'] = principal
+                issuer = text[currentIndex+2]
+                allValue['issuer'] = issuer
+                i = currentIndex + 3
+                description = ''
+                while text[i].startswith('Best ') is False:
+                    description = description+text[i]+'\n'
+                    i += 1
+                allValue['description'] = description
+            elif line.startswith('Best AON Bidder:'):
+                bestMBMTIC = text[currentIndex+2] + ' '+text[currentIndex+3]
+                allValue['bestMBMTIC'] = bestMBMTIC
+                bestAONTIC = text[currentIndex+4] + ' '+text[currentIndex+5]
+                bestAONBidder = text[currentIndex+6] + ' '+text[currentIndex+7]
+                allValue['bestAONBidder'] = bestAONBidder
+                allValue['bestAONTIC'] = bestAONTIC
+            elif line == 'Sep 1, 2002':
+                i = 0
+                form = 'Due| Principal Amount*| Coupon| Purchas| Price| Purchase Yield| MBM Winner**| Time'
+                while 'Preliminary,' not in text[currentIndex+i]:
+                    if text[currentIndex+i].startswith('Sep'):
+                        form = form+'\n'+text[currentIndex+i]
+                    else:
+                        form = form+'| '+text[currentIndex+i]
+                    i += 1
+                allValue['form'] = form
+            elif line.startswith('Preliminary,'):
+                statement = '*'+text[currentIndex]
+                i = 1
+                while 'Click below to see other bidder results' not in text[currentIndex+i]:
+                    if text[currentIndex+i].startswith('‡') or text[currentIndex+i].startswith('**'):
+                        statement = statement+'\n'+text[currentIndex+i]
                     i += 1
                 allValue['statement'] = statement
         allValue = get_term_result(allValue, termName, localTextFile)
@@ -757,10 +927,13 @@ def writeFianlResults(resultPageFile, dataFilePath, outputFile):
         sheet1.write(0, i, header[i])
 
     with open(resultPageFile, 'r') as rp:
+        par = tqdm.tqdm()
         i = 1
         for line in rp:
             tokens = line.split('\t')
             fileTitle = tokens[1]
+            par.update(1)
+            print(fileTitle)
             site = tokens[6]
             allValue = get_encode_patten(
                 site, fileTitle, dataFilePath, localTextFile)
@@ -785,15 +958,15 @@ def main():
     writeFianlResults(resultPageFile, dataFilePath, outputFile)
 
 
-'''if __name__ == "__main__":
-    main()'''
+if __name__ == "__main__":
+    main()
 
 
-linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/'
+'''linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/'
 dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/test/'
 resultPageFile = linkFilePath+'results_page_info.tsv'
 url = 'https://auctions.grantstreet.com/results/bond'
-fileTitle = 'Iowa.CCC.Taxable.GOSB.20C'
+fileTitle = 'Montgomery.ASD.GOs.01.MBM'
 localTextFile=get_all_local_text(dataFilePath)
-alls = get_results_patten1(fileTitle, dataFilePath, localTextFile)
-print(alls)
+alls = get_results_patten6(fileTitle, dataFilePath, localTextFile)
+print(alls)'''
