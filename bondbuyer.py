@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import tqdm
+import fiscal_advisors as fa
 
 
 def gen_url(startUrl, id):
@@ -84,39 +85,45 @@ def get_details(filePath, webPage):
                     '#productDataPrev')[0].get_text(separator='\n')
                 out.write(productDataPrev)
         out.close()
+        return head
 
 
-'''startUrl = 'https://data.bondbuyer.com/salesresults/GetDetails/'
-startId = 4802
-Id = startId
-url = gen_url(startUrl, Id)
-page = get_page(url)
-page = page.replace('</br>', '\n')
-soup = BeautifulSoup(page, 'lxml')
-salesResults = soup.find_all('p', 'RCSalesResultcls')
-print(len(salesResults))'''
-
-
-def main():
-    startUrl = 'https://data.bondbuyer.com/salesresults/GetDetails/'
-    startId = 9999
-    Id = startId
-    path = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/bondbuyer/'
+def get_webpage_to_local(startUrl, path, infoPageName):
     count = 0
-    par = tqdm.tqdm(total = startId, ncols=80)
-    while Id > 0:
-        par.update(1)
-        url = gen_url(startUrl, Id)
-        page = get_page(url)
-        if page is not None:
-            get_details(path, page)
-            count += 1
-        else:
-            print('page {} is not exist'.format(str(Id)))
-        Id -= 1
+    startId = 9999
+    par = tqdm.tqdm(total=startId, ncols=80)
+    Id = startId
+    with open(infoPageName, 'w') as iP:
+        iP.write('ID' + '\t'+'Page Name' + '\t' + 'Summary link' + '\n')
+        while Id > 0:
+            par.update(1)
+            url = gen_url(startUrl, Id)
+            page = get_page(url)
+            if page is not None:
+                head = get_details(path, page)
+                count += 1
+                iP.write(str(Id) + '\t'+head + '\t' + url + '\n')
+            Id -= 1
+    iP.close()
     print('total page is {}'.format(str(count)))
 
 
-if __name__ == "__main__":
-    main()
+startUrl = 'https://data.bondbuyer.com/salesresults/GetDetails/'
+textPath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/bondbuyer/text/'
+resultPath =  '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/bondbuyer/result/'
+infoPageName = resultPath + 'infoPage.tsv'
+get_webpage_to_local(startUrl, textPath, infoPageName)
+
+usState = ['ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA', 'COLORADO',
+           'CONNECTICUT', 'DELAWARE', 'FLORIDA', 'GEORGIA', 'HAWAII', 'IDAHO',
+           'ILLINOIS', 'INDIANA', 'IOWA', 'KANSAS', 'KENTUCKY', 'LOUISIANA', 'MAINE',
+           'MARYLAND', 'MASSACHUSETTS', 'MICHIGAN', 'MINNESOTA', 'MISSISSIPPI', 'MISSOURI',
+           'MONTANA', 'NEBRASKA', 'NEVADA', 'NEW HAMPSHIRE', 'NEW JERSEY', 'NEW MEXICO',
+           'NEW YORK', 'NORTH CAROLINA', 'NORTH DAKOTA', 'OHIO', 'OKLAHOMA', 'OREGON',
+           'PENNSYLVANIA', 'RHODE ISLAND', 'SOUTH CAROLINA', 'SOUTH DAKOTA', 'TENNESSEE',
+           'TEXAS', 'UTAH', 'VERMONT', 'VIRGINIA', 'WASHINGTON', 'WEST VIRGINIA', 'WISCONSIN', 'WYOMING']
+
+
+#def init_resule_value():
+
 
