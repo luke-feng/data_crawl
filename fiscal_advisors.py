@@ -377,8 +377,7 @@ def get_results_pattern1(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Date':
                 auctionDate = text[currentIndex+1]
@@ -454,8 +453,7 @@ def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Status':
                 auctionDate = text[currentIndex+1]
@@ -562,8 +560,7 @@ def get_results_pattern3(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Status':
                 auctionDate = text[currentIndex+1]
@@ -655,8 +652,7 @@ def get_results_pattern4(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Status':
                 auctionDate = text[currentIndex+1]
@@ -722,8 +718,7 @@ def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Date':
                 auctionDate = text[currentIndex+1]
@@ -817,8 +812,7 @@ def get_results_pattern6(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Status':
                 auctionDate = text[currentIndex+1]
@@ -888,8 +882,7 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
     termName = dataFilePath+fileTitle+'_terms.txt'
     if fileName in localTextFile:
         text = localTextFile[fileName]
-        for line in text:
-            currentIndex = text.index(line)
+        for currentIndex, line in enumerate(text):
             line = line.strip()
             if line == 'Auction Status':
                 auctionDate = text[currentIndex+1]
