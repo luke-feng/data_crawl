@@ -1,0 +1,23 @@
+PFMauction: Error
+The auction name transmitted by your browser is not
+			valid.  It is possible that either:
+The auction name has been changed,
+The auction has been removed from this site, or
+Your browser is sending over garbled data.
+Please click the "PFMauction Home Page"
+			link below to re-enter the site.
+Go to:
+Rules
+,
+Selections
+,
+Results
+Exit to:
+PFMauction Home Page
+For information about a particular bond sale,
+contact PFMauction
+.
+For general information about bond sales, call Public Financial Management at (717) 232-2723.
+Please direct questions and comments regarding bidding procedures to the
+Auction Administrator
+or call (412) 391-5555.

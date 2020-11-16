@@ -100,7 +100,7 @@ def get_results_page_info(webPage, fileName, dataFilePath):
             principal = tr.find("td", "principal").get_text()
             state = tr.find("td", "state").get_text()
             site = tr.find("td", "site").get_text()
-            description = tr.find("td", "description").get_text()
+            description = tr.find("td", "description").get_text().replace('\n',' ').replace('\t',' ')
             title = tr.find("td", "title").find('a')
             issuer = title.get_text()
             summaryLink = title['href']
@@ -136,29 +136,30 @@ def get_results_page_info(webPage, fileName, dataFilePath):
 
 def get_encode_pattern(site, fileTitle, dataFilePath, localTextFile):
     pattern1 = ['AICauction', 'BairdAuction', 'BidEhlers', 'BidMass', 'BidUmbaugh',
-               'ColumbiaCapitalAuction', 'DavidsonBondAuction',
-               'FirstSWauction', 'MuniAuction', 'NSIauction',
-               'PDXauction', 'PFMauction', 'PGCorbinAuction',  'ShattuckHammondAuction', 'SpeerAuction']
+                'ColumbiaCapitalAuction', 'DavidsonBondAuction',
+                'FirstSWauction', 'MuniAuction', 'NSIauction',
+                'PDXauction', 'PFMauction', 'PGCorbinAuction',  'ShattuckHammondAuction', 'SpeerAuction']
     pattern2 = ['KNNauction']
     pattern3 = ['DainRauscherAuction']
     pattern4 = ['PGHauction']
     pattern5 = ['FiscalAdvisorsAuction']
     pattern7 = ['UnivSystemOfMaryland.RevBonds.1999B.AON', 'AvonGroveSD.GOs.Series1999.AON', 'MiltonAreaSD.Series1999.AON',
-               'HillsboroughCounty.Series1999.AON', 'NorthernYorkSD.Series1999.AON', 'LancasterSD.Series1999.AON',
-               'LigonierValleySD.SeriesB1999.MBM', 'LigonierValleySD.SeriesA1999.AON', 'FranklinRegionalSD.Series1999.AON',
-               'CrawfordCounty.GOs.Series1999.AON', 'CheltenhamSD.Series1999.AON', 'Monroeville.GOs.1999.AON',
-               'DouglasCnty.NV.GOs.Series1999.AON', 'Portland.GOs.Series1999A.AON', 'KingCounty.Series1999.AON', 'GlenviewParkDistrict.Series1999.AON',
-               'WashingtonState.GOBonds.Series1999S3.AON', 'WashingtonState.GOs.1999S2.AON', 'Michigan.StateBldgAuth.1999IRevBonds.AON',
-               'NYCTFA.1999C.Taxable.AON', 'Portland.LtdTaxRevBonds.1999A.AON', 'NewYorkCity.GOs.Fiscal1999I.AON',
-               'SanFrancisco.TaxAllocRevRefBonds.1999B.AON', 'SanFrancisco.TaxAllocRevRefBonds.1999A.AON', 'CorvallisCity.OR.GOBonds.1999A.AON',
-               'Ft.Wayne.SewageWorksJrRevBonds.98B.AON', 'PinellasCty.TranspRevBonds.1998', 'NorthKCHospital.1998.AON', 'Ft.Lauderdale.ExciseTax.1998C.AON',
-               'AlbanyAirport.98C.AON', 'AlbanyAirport.98B.AON', 'Minn-St.PaulMetroAirport.Series13.AON', 'Tennessee.GO.1998B.AON',
-               'VolusiaCnty.FL.Series1998.AON', 'Portland.Sewer.1998A.AON', 'Pittsburgh.GO.98E.TAXABLE.MBM',
-               'Pittsburgh.GO.98D.MBM', 'TennesseeStateSchoolBondAuthority.98SeriesA', 'TennesseeStateSchoolBondAuthority.98SeriesBTAXABLE',
-               'Ft.Lauderdale.ExciseTax.1998.AON', 'Ft.Lauderdale.GO.1998.MBM', 'SarasotaMemorialHospital.98A.AON', 'SanFranciscoRDA.98D.CIBS.AON',
-               'SanFranciscoRDA.98D.CABS.AON', 'Portland.1998A.AON', 'PittsburghWaterAndSewer.SeriesA.MBM', 'PittsburghWaterAndSewer.SeriesB.MBM',
-               'PittsburghWaterAndSewer.SeriesC.MBM', 'Pittsburgh.1998TaxableGOBonds.MBM', '1997.Pittsburgh.GOBonds']
-    aIPatten = ['Lincoln.NE.Swr.RBs.03.AON', 'Lincoln.NE.GOs.03.AON']
+                'HillsboroughCounty.Series1999.AON', 'NorthernYorkSD.Series1999.AON', 'LancasterSD.Series1999.AON',
+                'LigonierValleySD.SeriesB1999.MBM', 'LigonierValleySD.SeriesA1999.AON', 'FranklinRegionalSD.Series1999.AON',
+                'CrawfordCounty.GOs.Series1999.AON', 'CheltenhamSD.Series1999.AON', 'Monroeville.GOs.1999.AON',
+                'DouglasCnty.NV.GOs.Series1999.AON', 'Portland.GOs.Series1999A.AON', 'KingCounty.Series1999.AON', 'GlenviewParkDistrict.Series1999.AON',
+                'WashingtonState.GOBonds.Series1999S3.AON', 'WashingtonState.GOs.1999S2.AON', 'Michigan.StateBldgAuth.1999IRevBonds.AON',
+                'NYCTFA.1999C.Taxable.AON', 'Portland.LtdTaxRevBonds.1999A.AON', 'NewYorkCity.GOs.Fiscal1999I.AON',
+                'SanFrancisco.TaxAllocRevRefBonds.1999B.AON', 'SanFrancisco.TaxAllocRevRefBonds.1999A.AON', 'CorvallisCity.OR.GOBonds.1999A.AON',
+                'Ft.Wayne.SewageWorksJrRevBonds.98B.AON', 'PinellasCty.TranspRevBonds.1998', 'NorthKCHospital.1998.AON', 'Ft.Lauderdale.ExciseTax.1998C.AON',
+                'AlbanyAirport.98C.AON', 'AlbanyAirport.98B.AON', 'Minn-St.PaulMetroAirport.Series13.AON', 'Tennessee.GO.1998B.AON',
+                'VolusiaCnty.FL.Series1998.AON', 'Portland.Sewer.1998A.AON', 'Pittsburgh.GO.98E.TAXABLE.MBM',
+                'Pittsburgh.GO.98D.MBM', 'TennesseeStateSchoolBondAuthority.98SeriesA', 'TennesseeStateSchoolBondAuthority.98SeriesBTAXABLE',
+                'Ft.Lauderdale.ExciseTax.1998.AON', 'Ft.Lauderdale.GO.1998.MBM', 'SarasotaMemorialHospital.98A.AON', 'SanFranciscoRDA.98D.CIBS.AON',
+                'SanFranciscoRDA.98D.CABS.AON', 'Portland.1998A.AON', 'PittsburghWaterAndSewer.SeriesA.MBM', 'PittsburghWaterAndSewer.SeriesB.MBM',
+                'PittsburghWaterAndSewer.SeriesC.MBM', 'Pittsburgh.1998TaxableGOBonds.MBM', '1997.Pittsburgh.GOBonds']
+    aIPatten = ['Lincoln.NE.Swr.RBs.03.AON', 'Lincoln.NE.GOs.03.AON',
+                'GreenvilleASD.GO.02A.AON', 'AbingtonSD.GOs.02.AON', 'Bedford.Twp.GOs.02.AON']
     allValue = dict()
     if fileTitle == 'Montgomery.ASD.GOs.01.MBM':
         allValue = get_results_pattern6(fileTitle, dataFilePath, localTextFile)
@@ -919,11 +920,11 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                 allValue['description'] = description
             elif line == 'Winner**:':
                 if text[currentIndex-1] == 'Best MBM TIC:':
-                    bestAONBidder = text[currentIndex+1] + \
+                    bestAONBidder = text[currentIndex+1] +\
                         ' '+text[currentIndex+2]
-                    bestAONTIC = text[currentIndex+3] + \
+                    bestAONTIC = text[currentIndex+3] +\
                         ' '+text[currentIndex+4]
-                    bestMBMTIC = text[currentIndex+5] + \
+                    bestMBMTIC = text[currentIndex+5] +\
                         ' '+text[currentIndex+6]
                     allValue['bestMBMTIC'] = bestMBMTIC
                     allValue['bestAONBidder'] = bestAONBidder
@@ -940,12 +941,12 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                         i += 1
                     allValue['form'] = form
                 elif text[currentIndex-1] == 'Best AON Bidder:':
-                    bestMBMTIC = text[currentIndex+1] + \
-                        ' '+text[currentIndex+2]
-                    bestAONTIC = text[currentIndex+3] + \
-                        ' '+text[currentIndex+4]
-                    bestAONBidder = text[currentIndex+5] + \
-                        ' '+text[currentIndex+6]
+                    bestMBMTIC = text[currentIndex+1] +\
+                    ' '+text[currentIndex+2]
+                    bestAONTIC = text[currentIndex+3] +\
+                    ' '+text[currentIndex+4]
+                    bestAONBidder = text[currentIndex+5] +\
+                    ' '+text[currentIndex+6]
                     allValue['bestMBMTIC'] = bestMBMTIC
                     allValue['bestAONBidder'] = bestAONBidder
                     allValue['bestAONTIC'] = bestAONTIC
@@ -1017,22 +1018,23 @@ def main():
     dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/text/'
     resultPageFile = linkFilePath+'results_page_info.tsv'
     url = 'https://auctions.grantstreet.com/results/bond'
-    #webPage = get_all_trs(url)
+    webPage = get_all_trs(url)
     outputFile = linkFilePath + 'final_bonds.xls'
-    #get_results_page_info(webPage, resultPageFile, dataFilePath)
+    get_results_page_info(webPage, resultPageFile, dataFilePath)
     writeFianlResults(resultPageFile, dataFilePath, outputFile)
+
 
 
 if __name__ == "__main__":
     main()
+
 '''
-
-
 linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/'
-dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/test/'
+dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/text/'
 resultPageFile = linkFilePath+'results_page_info.tsv'
 url = 'https://auctions.grantstreet.com/results/bond'
-fileTitle = 'LancasterSD.Series1999.AON'
-localTextFile=get_all_local_text(dataFilePath)
-alls = get_results_pattern7(fileTitle, dataFilePath, localTextFile)
-print(alls)'''
+fileTitle = 'GreenvilleASD.GO.02A.AON'
+localTextFile = get_all_local_text(dataFilePath)
+alls = get_results_pattern2(fileTitle, dataFilePath, localTextFile)
+print(alls)
+'''
