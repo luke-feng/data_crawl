@@ -17,7 +17,6 @@ import os
 import openpyxl
 
 
-
 def get_results_page_to_local(fromDate, toDate, infoPageName, textPath):
     url1 = 'https://data.bondbuyer.com/salesresults/SalesResult/GetSalesDetails?&FromDate={}&ToDate={}'.format(
         fromDate, toDate)
@@ -208,11 +207,15 @@ def get_result_pattern1(page):
     page = from_stream_to_list(page)
     allValue = init_resule_value()
     state = ''
+    nonVoid = False
     for currentIndex, line in enumerate(page):
         if line == '======RCSalesResultcls======':
-            if allValue['date'] is not '':
+            if currentIndex > 1 and nonVoid:
                 results.append(allValue)
             allValue = init_resule_value()
+            nonVoid = False
+            if not page[currentIndex+1].startswith('====') and not page[currentIndex+1].startswith('TAXABLE'):
+                nonVoid = True
         if line in usState:
             state = line
         if re.match(r'\d*-(.*)-\d*(.*)\$(.*)', line):
@@ -224,6 +227,18 @@ def get_result_pattern1(page):
             allValue['date'] = date
             allValue['principal'] = principal
             description = page[currentIndex+1]
+            allValue['description'] = description
+        if re.match(r'(.*) \d*, \d*', line) and page[currentIndex+1].isdigit():
+            issuer = page[currentIndex-1]
+            allValue['issuer'] = issuer
+            date = line
+            principal = page[currentIndex+1]
+            allValue['date'] = date
+            allValue['principal'] = '$' + principal
+            description = page[currentIndex+2]
+            allValue['description'] = description
+        if 'Bonds' in line or 'Series' in line or 'Note' in line and allValue['description'] is not '':
+            description = line
             allValue['description'] = description
         if line.startswith('Dated '):
             dated = line
@@ -276,13 +291,14 @@ def get_result_pattern1(page):
                 i += 1
             allValue['form'] = form
         allValue['state'] = state
-        if currentIndex == len(page) - 1:
-            if allValue['date'] is not '':
-                results.append(allValue)
+        if currentIndex == len(page) - 1 and nonVoid:
+            results.append(allValue)
     return results
 
 
 def get_result_pattern2(page):
+    mon = ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr',
+           'Mar', 'Feb', 'Jan']
     results = []
     page = from_stream_to_list(page)
     allValue = init_resule_value()
@@ -296,10 +312,22 @@ def get_result_pattern2(page):
             date = c[0]
             principal = c[1]
             issuer = page[currentIndex-1]
+        if re.match(r'\d*-(.*)-\d*', line):
+            issuer = page[currentIndex-1]
+            c = line.split()
+            date = c[0]
+            if len(c) == 2:
+                principal = c[1]
+        if re.match(r'(.*)\ \d*,\ \d*(.*)\$(.*)', line):
+            c = line.split()
+            if c[0] in mon:
+                issuer = page[currentIndex-1]
+                date = c[0] + ' ' + c[1] +c[2]
+                if len(c) == 4:
+                    principal = c[3]
         if line in usState:
             state = line
-        if 'Bonds' in line or 'Series' in line or 'Note' in line or 'bank qualified' in line or 'book entry' in line:
-
+        if 'Bonds' in line or 'Series' in line or 'Note' in line and (line is not 'California Education Notes Program') and (line is not 'California Communities Note Program'):
             if allValue['description'] is not '':
                 results.append(allValue)
                 allValue = init_resule_value()
@@ -379,8 +407,7 @@ def get_result_pattern2(page):
                 i += 1
             allValue['form'] = form
         if currentIndex == len(page) - 1:
-            if allValue['date'] is not '':
-                results.append(allValue)
+            results.append(allValue)
     return results
 
 
@@ -400,7 +427,7 @@ usState = ['ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA', 'COLORADO',
            'MONTANA', 'NEBRASKA', 'NEVADA', 'NEW HAMPSHIRE', 'NEW JERSEY', 'NEW MEXICO',
            'NEW YORK', 'NORTH CAROLINA', 'NORTH DAKOTA', 'OHIO', 'OKLAHOMA', 'OREGON',
            'PENNSYLVANIA', 'RHODE ISLAND', 'SOUTH CAROLINA', 'SOUTH DAKOTA', 'TENNESSEE',
-           'TEXAS', 'UTAH', 'VERMONT', 'VIRGINIA', 'WASHINGTON', 'WEST VIRGINIA', 'WISCONSIN', 'WYOMING']
+           'TEXAS', 'UTAH', 'VERMONT', 'VIRGINIA', 'WASHINGTON', 'WEST VIRGINIA', 'WISCONSIN', 'WYOMING', 'DISTRICT OF COLUMBIA', 'AMERICAN SAMOA']
 
 
 def main():
