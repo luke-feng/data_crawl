@@ -21,18 +21,26 @@ from selenium.webdriver.chrome.options import Options
 
 
 def get_all_trs(url):
+    """
+    get web source code from the results webpage
+    :param url: the results webpage
+    :return page: string data type, page source code
+    """
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(options=chrome_options)
     browser.get(url)
+    # select 'all results'
     input = browser.find_element_by_css_selector(
         'body>#container>#subpagecontent>#datatable_wrapper>.dataTables_header>.dataTables_length>label>select')
     s1 = Select(input)
     s1.select_by_value('-1')
+    # wait util JS loaded all trs finished
     Wait(browser, 600).until(
         Expect.presence_of_element_located(
             (By.CSS_SELECTOR, "body>#container>#subpagecontent>#datatable_wrapper>#datatable>tbody>tr"))
     )
+    # get web source code
     page = browser.page_source
     page = page.replace('&amp;', '&')
     page = page.replace('&nbsp;', ' ')
@@ -42,6 +50,11 @@ def get_all_trs(url):
 
 
 def get_page(url):
+    """
+    get web source code from the summary and term webpages
+    :param url: the summary or term webpage
+    :return page: string data type, page source code
+    """
     if 'www' in url or 'http' in url:
         try:
             webPage = requests.get(url)
@@ -58,6 +71,11 @@ def get_page(url):
 
 
 def get_file_name(url):
+    """
+    get webpage name
+    :param url: the summary or term webpage
+    :return page: string data type, pagename
+    """
     matchObj = re.match(r'(.*?)results/(.*?)/', url, re.M | re.I)
     if matchObj:
         return matchObj.group(2)
@@ -67,6 +85,11 @@ def get_file_name(url):
 
 
 def get_text(url):
+    """
+    parse the page source code and get the text from it
+    :param url: the summary or term webpage
+    :return page: web text
+    """
     page = get_page(url)
     if page is not None:
         soup = BeautifulSoup(page, 'lxml')
@@ -77,12 +100,17 @@ def get_text(url):
 
 
 def get_results_page_info(webPage, fileName, dataFilePath):
-    '''localHtml = open(link, 'r', encoding='utf-8')
-    htmlHandle = localHtml.read()
-    htmlHandle = htmlHandle.replace('&amp;', '&')
-    htmlHandle = htmlHandle.replace('&nbsp;', ' ')'''
+    """
+    get all basic information from the results page, save it to a tsv file; get all the summary pages and term pages, and save them to local data path
+    :param webPage: source code of the results page
+    :param fileName: output tsv file name
+    :param dataFilePath: output text file path/dir
+    :return summaryLinks: List like data type, all summary links 
+    :return termLinks: List like data type, all term links
+    """
     summaryLinks = []
     termLinks = []
+    # parse the results page
     soup = BeautifulSoup(webPage, 'lxml')
     trs = soup.select(
         'body>#container>#subpagecontent>#datatable_wrapper>#datatable>tbody>tr')
@@ -90,34 +118,41 @@ def get_results_page_info(webPage, fileName, dataFilePath):
     tc = 0
     ic = 0
     with open(fileName, 'w') as out:
+        # write the first line of the tsv file
         out.write('Id'+'\t'+'Auction_Name'+'\t'+'Date'+'\t'+'Principal'+'\t'+'Issuer'+'\t' +
                   'State'+'\t'+'Site'+'\t'+'Description'+'\t'+'Summary_link'+'\t'+'Term_link'+'\n')
         par = tqdm.tqdm(total=count)
         for tr in trs:
             par.update(1)
+            # get all basic information, including Id, date, principal, state , description, title, issuer
             Id = tr['id']
             date = tr.find("td", "date sorting_1").get_text()
             principal = tr.find("td", "principal").get_text()
             state = tr.find("td", "state").get_text()
             site = tr.find("td", "site").get_text()
-            description = tr.find("td", "description").get_text().replace('\n',' ').replace('\t',' ')
+            description = tr.find("td", "description").get_text().replace(
+                '\n', ' ').replace('\t', ' ')
             title = tr.find("td", "title").find('a')
             issuer = title.get_text()
+            # get the summary link
             summaryLink = title['href']
             summaryLinks.append(summaryLink)
             fileTitle = get_file_name(summaryLink)
             summaryName = dataFilePath + fileTitle + '_summary.txt'
+            # write summary webpage to local file
             with open(summaryName, 'w') as sumOut:
                 summary = get_text(summaryLink)
                 sumOut.write(summary)
                 sumOut.close()
             tc += 1
+            # get the term link
             term = tr.find("td", "links").find_all('a')
             termLink = ' '
             for t in term:
                 if 'Terms' in t.get_text():
                     termLink = t['href']
                     ic += 1
+                    # write summary webpage to local file
                     termName = dataFilePath + fileTitle + '_terms.txt'
                     with open(termName, 'w') as termOut:
                         term = get_text(termLink)
@@ -127,6 +162,7 @@ def get_results_page_info(webPage, fileName, dataFilePath):
                 else:
                     termLink = ' '
             termLinks.append(termLink)
+            # write the basic information to the tsv file
             out.write(Id+'\t'+fileTitle+'\t'+date+'\t'+principal+'\t'+issuer+'\t' +
                       state+'\t'+site+'\t'+description+'\t'+summaryLink+'\t'+termLink+'\n')
         out.close()
@@ -135,6 +171,23 @@ def get_results_page_info(webPage, fileName, dataFilePath):
 
 
 def get_encode_pattern(site, fileTitle, dataFilePath, localTextFile):
+    """
+    try to decode the infromation from all different patterns, and turn the raw data to a structured result
+    :param site: the source site of the page
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
+    '''
+    example pattern 1 : https://www.muniauction.com/pma/results/Slinger.GOR.AON/bid_summary.html
+    example pattern 2 : https://www.knnauction.com/pma/results/San.Diego.PFFA.LRBs.02B.AON/bid_summary.html
+    example pattern 3 : https://www.muniauction.com/pma/results/FarmingtonMSD.No5.NM.GOs.AON/bid_summary.html
+    example pattern 4 : https://www.muniauction.com/pma/results/Pittsburgh.PA.GOs.99A.MBM/best_bids.html
+    example pattern 5 : https://www.fiscaladvisorsauction.com/pma/results/Ilion.Vllg.NY.GOB.20/bid_summary.html
+    example pattern 6 : https://www.pfmauction.com/pma/results/Montgomery.ASD.GOs.01.MBM/best_bids.html
+    example pattern 7 : https://www.pfmauction.com/pma/results/UnivSystemOfMaryland.RevBonds.1999B.AON/best_bids.html
+    '''
     pattern1 = ['AICauction', 'BairdAuction', 'BidEhlers', 'BidMass', 'BidUmbaugh',
                 'ColumbiaCapitalAuction', 'DavidsonBondAuction',
                 'FirstSWauction', 'MuniAuction', 'NSIauction',
@@ -184,8 +237,14 @@ def get_encode_pattern(site, fileTitle, dataFilePath, localTextFile):
 
 
 def get_all_local_text(dataFilePath):
+    """
+    turn all local raw page into a list
+    :param dataFilePath: raw text file path/dir
+    :return localTextFile: list like data type, all local raw text within a list
+    """
     fileList = os.listdir(dataFilePath)
     localTextFile = {}
+    # get all file
     for fname in fileList:
         file = []
         if ".txt" in fname:
@@ -199,6 +258,10 @@ def get_all_local_text(dataFilePath):
 
 
 def init_results_value():
+    """
+    initialize the result dict
+    :return allValue: dict like data type, a initialized data structure
+    """
     allValue = dict()
     allValue['auctionDate'] = ''
     allValue['types'] = ''
@@ -249,6 +312,13 @@ def init_results_value():
 
 
 def get_term_result(allValue, termName, localTextFile):
+    """
+    turn the term raw data to a structured data result
+    :param allValue: a structured result of the source page
+    :param termName: page title/name
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     if termName in localTextFile:
         tText = localTextFile[termName]
         for line in tText:
@@ -373,6 +443,14 @@ def get_term_result(allValue, termName, localTextFile):
 
 
 def get_results_pattern1(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 1, turn the summary raw data to a structured data result
+    example pattern 1 : https://www.muniauction.com/pma/results/Slinger.GOR.AON/bid_summary.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -449,6 +527,14 @@ def get_results_pattern1(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 2, turn the summary raw data to a structured data result
+    example pattern 2 : https://www.knnauction.com/pma/results/San.Diego.PFFA.LRBs.02B.AON/bid_summary.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -556,6 +642,14 @@ def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern3(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 3, turn the summary raw data to a structured data result
+    example pattern 3 : https://www.muniauction.com/pma/results/FarmingtonMSD.No5.NM.GOs.AON/bid_summary.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -648,6 +742,14 @@ def get_results_pattern3(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern4(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 4, turn the summary raw data to a structured data result
+    example pattern 4 : https://www.muniauction.com/pma/results/Pittsburgh.PA.GOs.99A.MBM/best_bids.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -714,6 +816,14 @@ def get_results_pattern4(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 5, turn the summary raw data to a structured data result
+    example pattern 5 : https://www.fiscaladvisorsauction.com/pma/results/Ilion.Vllg.NY.GOB.20/bid_summary.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -808,6 +918,14 @@ def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern6(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 6, turn the summary raw data to a structured data result
+    example pattern 6 : https://www.pfmauction.com/pma/results/Montgomery.ASD.GOs.01.MBM/best_bids.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -878,6 +996,14 @@ def get_results_pattern6(fileTitle, dataFilePath, localTextFile):
 
 
 def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
+    """
+    pattern 7, turn the summary raw data to a structured data result
+    example pattern 7 : https://www.pfmauction.com/pma/results/UnivSystemOfMaryland.RevBonds.1999B.AON/best_bids.html
+    :param fileTitle: page title/name
+    :param dataFilePath: raw text file path/dir
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, a structured result of the source page
+    """
     allValue = init_results_value()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     termName = dataFilePath+fileTitle+'_terms.txt'
@@ -942,11 +1068,11 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                     allValue['form'] = form
                 elif text[currentIndex-1] == 'Best AON Bidder:':
                     bestMBMTIC = text[currentIndex+1] +\
-                    ' '+text[currentIndex+2]
+                        ' '+text[currentIndex+2]
                     bestAONTIC = text[currentIndex+3] +\
-                    ' '+text[currentIndex+4]
+                        ' '+text[currentIndex+4]
                     bestAONBidder = text[currentIndex+5] +\
-                    ' '+text[currentIndex+6]
+                        ' '+text[currentIndex+6]
                     allValue['bestMBMTIC'] = bestMBMTIC
                     allValue['bestAONBidder'] = bestAONBidder
                     allValue['bestAONTIC'] = bestAONTIC
@@ -974,10 +1100,15 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
 
 
 def writeFianlResults(resultPageFile, dataFilePath, outputFile):
+    """
+    write all results to a xls file
+    :param resultPageFile: the tsv file of the first page information
+    :param dataFilePath: raw text file path/dir
+    :param outputFile: output xls file name
+    """
     localTextFile = get_all_local_text(dataFilePath)
     xlsFile = xlwt.Workbook()
     sheet1 = xlsFile.add_sheet('results', cell_overwrite_ok=True)
-
     header = ['Id', 'Auction Name', 'Date', 'Principal', 'Issuer', 'State', 'Site', 'Description', 'Summary link',
               'Term link', 'Auction Date', 'Auction Types', 'Auction Start', 'Auction End', 'Auction Last Update', 'Auction Status',
               'Auction Principal', 'Auction Issuer', 'Auction Description', 'Auction Best AON Bidder', 'Auction Best AON TIC',
@@ -999,7 +1130,6 @@ def writeFianlResults(resultPageFile, dataFilePath, outputFile):
             fileTitle = tokens[1]
             par.update(1)
             site = tokens[6]
-            print(fileTitle)
             allValue = get_encode_pattern(
                 site, fileTitle, dataFilePath, localTextFile)
             if tokens[0].startswith('Id') is False:
@@ -1014,27 +1144,23 @@ def writeFianlResults(resultPageFile, dataFilePath, outputFile):
 
 
 def main():
-    linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/'
-    dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/text/'
+    '''
+    main function
+    '''
+    # the local file path for the results(.tsv and .xls), you need to change it to your local path, like: '/Users/user/Documents/raw_data/linkfilepath/'
+    linkFilePath = 'you need to change'
+    # the local file path for the all rew data(.txt), you need to change it to your local path, like: '/Users/user/Documents/raw_data/datafilepath/'
+    dataFilePath = 'you need to change'
+    # output file path and name for the tsv file of search results webpage
     resultPageFile = linkFilePath+'results_page_info.tsv'
+    # url of search results webpage
     url = 'https://auctions.grantstreet.com/results/bond'
     webPage = get_all_trs(url)
+    # file path and name of the fianl results
     outputFile = linkFilePath + 'final_bonds.xls'
     get_results_page_info(webPage, resultPageFile, dataFilePath)
     writeFianlResults(resultPageFile, dataFilePath, outputFile)
 
 
-
 if __name__ == "__main__":
     main()
-
-'''
-linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/html/'
-dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/fiscal_advisor/text/'
-resultPageFile = linkFilePath+'results_page_info.tsv'
-url = 'https://auctions.grantstreet.com/results/bond'
-fileTitle = 'GreenvilleASD.GO.02A.AON'
-localTextFile = get_all_local_text(dataFilePath)
-alls = get_results_pattern2(fileTitle, dataFilePath, localTextFile)
-print(alls)
-'''

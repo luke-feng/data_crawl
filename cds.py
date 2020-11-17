@@ -9,8 +9,14 @@ import fiscal_advisors as fa
 
 
 def get_results_page_info(webPage, fileName, dataFilePath):
+    """
+    get all basic information from the results page, save it to a tsv file; get all the summary pages and save them to local data path
+    :param webPage: source code of the results page
+    :param fileName: output tsv file name
+    :param dataFilePath: output text file path/dir
+    :return summaryLinks: List like data type, all summary links 
+    """
     summaryLinks = []
-    termLinks = []
     soup = BeautifulSoup(webPage, 'lxml')
     trs = soup.select(
         'body>#container>#subpagecontent>#datatable_wrapper>#datatable>tbody>tr')
@@ -44,10 +50,17 @@ def get_results_page_info(webPage, fileName, dataFilePath):
                       state+'\t'+site+'\t'+description+'\t'+summaryLink+'\n')
         out.close()
     print("There are {} links in total.".format(tc))
-    return summaryLinks, termLinks
+    return summaryLinks
 
 
 def get_summary(fileTitle, dataFilePath, localTextFile):
+    """
+    turn the summary raw data to a structured data result
+    :param fileTitle: page title/name
+    :param dataFilePath: the raw txt data path
+    :param localTextFile: all local raw text within a list
+    :return allValue: dict like data type, the structured reuslts
+    """
     allValue = dict()
     fileName = dataFilePath+fileTitle+'_summary.txt'
     allValue['auctionDate'] = ''
@@ -140,6 +153,12 @@ def get_summary(fileTitle, dataFilePath, localTextFile):
 
 
 def writeFianlResults(resultPageFile, dataFilePath, outputFile):
+    """
+    write all results to a xls file
+    :param resultPageFile: the tsv file of the first page information
+    :param dataFilePath: raw text file path/dir
+    :param outputFile: output xls file name
+    """
     localTextFile = fa.get_all_local_text(dataFilePath)
     xlsFile = xlwt.Workbook()
     sheet1 = xlsFile.add_sheet('results', cell_overwrite_ok=True)
@@ -171,13 +190,21 @@ def writeFianlResults(resultPageFile, dataFilePath, outputFile):
     xlsFile.save(outputFile)
 
 def main():
-    linkFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/html/'
-    dataFilePath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/CDs/text/'
+    '''
+    main function
+    '''
+    # the local file path for the results(.tsv and .xls), you need to change it to your local path, like: '/Users/user/Documents/raw_data/linkfilepath/'
+    linkFilePath = you need to change'
+    # the local file path for the all rew data(.txt), you need to change it to your local path, like: '/Users/user/Documents/raw_data/datafilepath/'
+    dataFilePath = 'you need to change'
+    # file path and name of the fianl results
+    outputFile = linkFilePath + 'final_cds.xls'
+    # output file path and name for the tsv file of search results webpage
+    resultPageFile = linkFilePath+'results_page_info.tsv'
+    # url of search results webpage
     url = 'https://auctions.grantstreet.com/results/cd'
     webPage = fa.get_all_trs(url)
-    resultPageFile = linkFilePath+'results_page_info.tsv'
     get_results_page_info(webPage, resultPageFile, dataFilePath)
-    outputFile = linkFilePath + 'final_cds.xls'
     writeFianlResults(resultPageFile, dataFilePath, outputFile)
 
 

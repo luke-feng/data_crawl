@@ -18,20 +18,31 @@ import openpyxl
 
 
 def get_results_page_to_local(fromDate, toDate, infoPageName, textPath):
+    """
+    get all basic information from the results page, save it to a tsv file; get all the summary pages, and save them to local data path
+    :param fromDate: start date for search reaults
+    :param toDate: end date for search reaults
+    :param infoPageName: output tsv file name
+    :param textPath: output text file path/dir
+    """
+    # load the search page
     url1 = 'https://data.bondbuyer.com/salesresults/SalesResult/GetSalesDetails?&FromDate={}&ToDate={}'.format(
         fromDate, toDate)
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(options=chrome_options)
     browser.get(url1)
+    # a little trick, load again to get all results
     url2 = 'https://data.bondbuyer.com/salesresults/SalesResult/GetSalesDetails?page=1&pagesize=10000&FromDate={}&ToDate={}'.format(
         fromDate, toDate)
     browser.get(url2)
+    # wait a moment, until it loaded all needed information
     Wait(browser, 600).until(
         Expect.presence_of_element_located(
             (By.CSS_SELECTOR, "body>table>tbody>tr"))
     )
     trs = browser.find_elements_by_css_selector("body>table>tbody>tr")
+    # get all needed information
     if len(trs) > 1:
         with open(infoPageName, 'w') as iP:
             par = tqdm.tqdm(total=len(trs), ncols=80)
@@ -48,6 +59,7 @@ def get_results_page_to_local(fromDate, toDate, infoPageName, textPath):
                     title = a.text.lower()
                     title = title.replace('results', 'Results')
                     date = tr.find_element_by_css_selector('span').text
+                    # get summary page and save to local
                     page = get_page(summaryLink)
                     if page is not None:
                         title = get_details(textPath, page)
@@ -59,10 +71,16 @@ def get_results_page_to_local(fromDate, toDate, infoPageName, textPath):
 
 
 def gen_url(startUrl, id):
+    # get the full url
     return startUrl+str(id)
 
 
 def get_page(url):
+    """
+    get web source code from the summary webpages
+    :param url: the summary or term webpage
+    :return page: string data type, page source code
+    """
     webPage = requests.get(url)
     if webPage.status_code == 404:
         return None
@@ -73,12 +91,22 @@ def get_page(url):
 
 
 def get_id(tagId):
+    """
+    get ID of the TagId string code
+    :param tagId: TagId string code
+    :return Id: string data type, result id
+    """
     Id = re.search(r'\d+', tagId)
     if Id is not None:
         return Id.group(0)
 
 
 def get_all_ids(results):
+    """
+    get all the ids of the web source code
+    :param results: a list of find results
+    :return Ids: List data type, all results id
+    """
     Ids = []
     for result in results:
         tagId = result['id']
@@ -87,18 +115,29 @@ def get_all_ids(results):
 
 
 def get_head(webPage):
+    """
+    get web page title
+    :param webPage: webpage source code
+    :return head: string data type, webpage title
+    """
     soup = BeautifulSoup(webPage, 'lxml')
     head = soup.find('p', 'Headlinecls').get_text()
     return head
 
 
 def get_details(filePath, webPage):
+    '''
+    parse the webpage souce and save the text data to local
+    :param filePath: output raw text file path
+    :param webPage: source code of the webpage
+    '''
     soup = BeautifulSoup(webPage, 'lxml')
     head = soup.find('p', 'Headlinecls').get_text()
     if head is not None and head is not '':
         fileName = filePath + head+'.txt'
         with open(fileName, 'w') as out:
             salesResults = soup.find_all('p', 'RCSalesResultcls')
+            # if the webpage contains the RCSalesResultcls, only save the rcs/tb/foot part of the page
             if len(salesResults) > 0:
                 tblExcel = soup.find_all('table', 'tblExcel')
                 tblExcelHide = soup.find_all('table', 'tblExcelHide')
@@ -140,6 +179,7 @@ def get_details(filePath, webPage):
                     else:
                         print('index error')
             else:
+                # if there is no RCSalesResultcls, save all source text
                 productDataPrev = soup.select(
                     '#productDataPrev')[0].get_text(separator='\n')
                 out.write(productDataPrev)
@@ -148,6 +188,12 @@ def get_details(filePath, webPage):
 
 
 def get_webpage_to_local(startUrl, path, infoPageName):
+    '''
+    another way to get all raw data by using result id directly
+    :param startUrl: url of the summary page
+    :param path: output text file path/dir
+    :param infoPageName: output tsv file name
+    '''
     count = 0
     startId = 9400
     par = tqdm.tqdm(total=startId, ncols=80)
@@ -169,6 +215,10 @@ def get_webpage_to_local(startUrl, path, infoPageName):
 
 
 def init_resule_value():
+    """
+    initialize the result dict
+    :return allValue: dict like data type, a initialized data structure
+    """
     allValue = dict()
     allValue['state'] = ''
     allValue['issuer'] = ''
@@ -186,11 +236,15 @@ def init_resule_value():
     allValue['fa'] = ''
     allValue['otherBidder'] = ''
     allValue['otherManager'] = ''
-
     return allValue
 
 
 def from_stream_to_list(webPage):
+    """
+    trun the raw text to a list
+    :param webPage: text raw data of the page
+    :return pageList: list like data type, a list of string which contain all text of the page
+    """
     pageList = []
     pages = webPage.split('\n')
     for line in pages:
@@ -203,6 +257,15 @@ def from_stream_to_list(webPage):
 
 
 def get_result_pattern1(page):
+    """
+    trun the raw text to a structured results
+    :param page: text raw data of the page
+    :return results: list like data type, the structured reuslts
+    """
+    """
+    example pattern 1: contains the RCSalesResultcls
+    https://data.bondbuyer.com/salesresults/GetDetails/9378
+    """
     results = []
     page = from_stream_to_list(page)
     allValue = init_resule_value()
@@ -297,6 +360,15 @@ def get_result_pattern1(page):
 
 
 def get_result_pattern2(page):
+    """
+    trun the raw text to a structured results
+    :param page: text raw data of the page
+    :return results: list like data type, the structured reuslts
+    """
+    """
+    example pattern 2: non-containing of the RCSalesResultcls
+    https://data.bondbuyer.com/salesresults/GetDetails/2
+    """
     mon = ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr',
            'Mar', 'Feb', 'Jan']
     results = []
@@ -412,6 +484,11 @@ def get_result_pattern2(page):
 
 
 def get_pattern(page):
+    """
+    try to decode the infromation from all different patterns, and turn the raw data to a structured result
+    :param page: the raw data of the page
+    :return results: list like data type, the structured reuslts
+    """
     results = []
     if '======RCSalesResultcls======' in page:
         results = get_result_pattern1(page)
@@ -431,13 +508,23 @@ usState = ['ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA', 'COLORADO',
 
 
 def main():
+    # url of search results webpage
     startUrl = 'https://data.bondbuyer.com/salesresults/GetDetails/'
-    resultPath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/bondbuyer/result/'
-    textPath = '/Users/chaofeng/Documents/GitHub/data_crawl/raw_data/bondbuyer/text/'
+    # the local file path for the results(.tsv and .xls), you need to change it to your local path, like: '/Users/user/Documents/raw_data/linkfilepath/'
+    resultPath = 'you need to change'
+    # the local file path for the all rew data(.txt), you need to change it to your local path, like: '/Users/user/Documents/raw_data/datafilepath/'
+    textPath = 'you need to change'
+    # output file path and name for the tsv file of search results webpage
     infoPageName = resultPath + 'infoPage.tsv'
-    infoPageName = resultPath + 'infoPage.tsv'
-    #get_results_page_to_local('01/01/2000', '11/16/2020', infoPageName,textPath)
-    #get_webpage_to_local(startUrl, textPath, infoPageName)
+    # start date for the search 
+    startDate = '01/01/2000'
+    # end date for the search 
+    endDate = '11/16/2020'
+
+    get_results_page_to_local(startDate, endDate, infoPageName,textPath)
+    get_webpage_to_local(startUrl, textPath, infoPageName)
+    
+    # file path and name of the fianl results
     outputFile = resultPath + 'final_bondsbuyer.xlsx'
     xlsFile = openpyxl.Workbook()
     fileList = os.listdir(textPath)
