@@ -194,7 +194,7 @@ def main():
     main function
     '''
     # the local file path for the results(.tsv and .xls), you need to change it to your local path, like: '/Users/user/Documents/raw_data/linkfilepath/'
-    linkFilePath = you need to change'
+    linkFilePath = 'you need to change'
     # the local file path for the all rew data(.txt), you need to change it to your local path, like: '/Users/user/Documents/raw_data/datafilepath/'
     dataFilePath = 'you need to change'
     # file path and name of the fianl results
