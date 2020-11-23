@@ -1,0 +1,453 @@
+
+
+
+
+ColumbiaCapitalAuction: AON Auction Results: Bel.Aire.Cty.GOTN.17B.AON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Tue., Nov 7, 2017
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1510068600000;
+			
+10:30:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1510070400000;
+			
+
+
+11:00:00 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+11:05:52 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+NOTICE:
+
+
+
+				 
+                 The 2017B Notes and 2017C Notes have been awarded together to the bidder with the best Blended TIC: COMM-MK
+				 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$2,135,000
+*
+
+
+		City of Bel Aire, Kansas
+
+		General Obligation Temporary Notes, 
+Series 2017B 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Blended
+TIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+COMM-MK
+
+
+
+Commerce Bank
+
+
+1.566623%
+1.584702%
+
+
+10:36:50 am
+
+$113,125.35
+
+
+(11,529.00)
+
+
+$101,596.35
+
+
+
+
+
+
+2nd
+
+
+PIPE-DD
+
+
+
+Piper Jaffray
+
+
+1.635888%
+1.644581%
+
+
+10:44:24 am
+
+$96,964.58
+
+
+8,540.00
+
+
+$105,504.58
+
+
+
+
+
+
+3rd
+
+
+DADA-JS
+
+
+
+DA Davidson
+
+
+1.681884%
+1.702895%
+
+
+10:35:03 am
+
+$129,286.11
+
+
+(19,962.25)
+
+
+$109,323.86
+
+
+
+
+
+
+4th
+
+
+HUTC-JV
+
+
+
+Hutchinson Shockey Erley
+
+
+1.829784%
+1.842471%
+
+
+10:52:54 am
+
+$113,125.35
+
+
+5,000.00
+
+
+$118,125.35
+
+
+
+
+
+
+
+
+
+
+
+
+
+		*Preliminary, subject to change
+
+Note:
+ May not include sealed bids 
+						received outside of ColumbiaCapitalAuction 
+						system.
+
+
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+COMM-MK
+,
+
+COUN-LR
+,
+
+DADA-JS
+,
+
+HUTC-JV
+,
+
+PIPE-CC
+,
+
+PIPE-DD
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Bel%2EAire%2ECty%2EGOTN%2E17B%2EAON","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+POS
+, 
+Rules
+, 
+
+Selections
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+ColumbiaCapitalAuction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about this bond sale, call Columbia Capital at (913) 248-8500.
+
+
+
+        Please direct questions and comments regarding bidding procedures to the
+        
+Auction Administrator
+
+        or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

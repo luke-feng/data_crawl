@@ -1,0 +1,463 @@
+
+
+
+
+
+
+
+
+
+
+Terms: Jefferson.CSD.NY.SB.20.2
+
+
+
+				function nav_to_parent(link)
+				{
+					if (opener)
+					{
+						opener.location.href = link;
+						opener.focus();
+					}
+					else
+					{
+						window.open(link);
+					}
+					self.close();
+				}
+			
+
+
+
+
+
+
+
+
+
+
+
+
+TERMS*
+
+
+
+						[ 
+Print Page
+ ] 	
+						   
+                        
+					
+
+
+
+
+
+
+Jefferson.CSD.NY.SB.20.2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Issuer
+
+
+Jefferson Central School District
+
+
+
+
+
+
+  State
+
+
+New York
+
+
+
+
+
+
+  
+												Amount
+
+
+$100,655
+
+
+
+
+
+
+  Type 
+												Issue/Series  
+
+
+School District (Serial) Bonds, 2020
+
+
+
+
+
+
+  Bank 
+												Qualified
+
+
+Yes
+
+
+
+
+
+
+  
+												Good Faith
+
+
+None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Sale Date 
+
+
+11/19/20
+
+
+
+
+
+
+  
+												Dated Date
+
+
+12/15/20
+
+
+
+
+
+
+  Settlement 
+												Date
+1
+ 
+
+
+ 
+            12/15/20
+                                            
+
+
+
+
+
+
+  
+												Sale Time
+
+
+06:00 AM - 10:00 AM Eastern Time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Interest Due
+
+
+12/15, 6/15
+
+
+
+
+
+
+  Principal Due
+
+
+12/15/21 - 12/15/25
+
+
+
+
+
+
+  First Interest 
+												Date  
+
+
+12/15/21
+
+
+
+
+
+
+  Call Dates
+
+
+Non-Callable
+
+
+
+
+
+
+  Term Bonds
+
+
+No
+
+
+
+
+
+
+  
+												Min. Bid Price 
+												 
+
+
+100.000%
+
+
+
+
+
+
+  Bid Details
+
+
+
+												Non-descending Coupons Required - Starting 2021 
+
+
+
+
+
+
+
+
+  Insurance
+
+
+Bidder's Option / Bidder Pays / Not Factored into NIC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Bid Format
+
+
+All-Or-None
+
+
+
+
+
+
+  Auction Format 
+
+
+Closed
+
+
+
+
+
+
+  Award Basis
+												
+
+
+NIC
+
+
+
+
+
+
+  Two-Minute Rule 
+												 
+
+
+No
+
+
+
+
+
+
+  Bond Counsel
+
+
+Timothy R. McGill Law Offices
+Fairport, NY
+
+
+
+
+
+
+  Web 
+												Site
+
+
+www.FiscalAdvisorsAuction.com
+
+
+
+
+
+
+  Contact
+
+
+Fiscal Advisors & Marketing, Inc.
+250 South Clinton Street, Suite 502
+Syracuse, NY 13202
+Attn: Elyse Andrews
+Email: 
+eandrews@fiscaladvisors.com
+Phone: 315-752-0051 Ext. 349
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terms as of 11/21/2020 @ 7:25 am
+
+
+1
+Check offering documents or with Issuer and/or FA 
+							to ascertain if settlement is Firm or Tentative.
+						
+*
+ 
+							Disclaimer: This Term Sheet is provided by Grant 
+							Street Group for informational purposes and the 
+							convenience of bidders. Grant Street Group is not 
+							responsible for any inaccuracy in the information 
+							displayed. Bidders should carefully review the 
+							Notice of Sale and Preliminary Official Statement and decide whether 
+							to purchase Bonds solely on the basis of the information 
+							provided therein.
+	
+					
+
+
+
+
+
+
+
+						[ 
+Print Page
+ ] 
+						   
+                        
+					
+
+
+
+
+
+
+
+
+

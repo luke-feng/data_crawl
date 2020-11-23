@@ -1,0 +1,497 @@
+
+
+
+
+
+
+
+
+
+
+Terms: Denver.GOs.20A.AON
+
+
+
+				function nav_to_parent(link)
+				{
+					if (opener)
+					{
+						opener.location.href = link;
+						opener.focus();
+					}
+					else
+					{
+						window.open(link);
+					}
+					self.close();
+				}
+			
+
+
+
+
+
+
+
+
+
+
+
+
+TERMS*
+
+
+
+						[ 
+Print Page
+ ] 	
+						   
+                        
+					
+
+
+
+
+
+
+Denver.GOs.20A.AON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Issuer
+
+
+City and County of Denver
+
+
+
+
+
+
+  State
+
+
+Colorado
+
+
+
+
+
+
+  
+												Amount
+1
+
+
+$169,925,000
+
+
+
+
+
+
+  Type 
+												Issue/Series  
+
+
+General Obligation Elevate Denver Bonds
+  Series 2020A
+
+
+
+
+
+
+  
+												Rating  
+
+
+Moody's: 
+Aaa
+S&P: 
+AAA
+Fitch: 
+AAA
+
+
+
+
+
+
+  Bank 
+												Qualified
+
+
+No
+
+
+
+
+
+
+  
+												Good Faith
+
+
+Winning bidder to wire $600,000 by 2pm ET on the sale date
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Sale Date 
+
+
+11/17/20
+
+
+
+
+
+
+  
+												Dated Date
+
+
+12/03/20
+
+
+
+
+
+
+  Settlement 
+												Date
+2
+ 
+
+
+ 
+            12/03/20
+                                            
+
+
+
+
+
+
+  
+												Sale Time
+
+
+10:30 AM - 11:14 AM Eastern Time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Interest Due
+
+
+2/1, 8/1
+
+
+
+
+
+
+  Principal Due
+
+
+8/01/21 - 8/01/39
+
+
+
+
+
+
+  First Interest 
+												Date  
+
+
+2/01/21
+
+
+
+
+
+
+  Call Dates
+
+
+8/01/30 @ Par
+
+
+
+
+
+
+  Term Bonds
+
+
+Allowed
+
+
+
+
+
+
+  
+												Min. Bid Price 
+												 
+
+
+112.000%
+
+
+
+
+
+
+  Bid Details
+
+
+
+												Max. Spread: 3.000%
+
+Multiple: Either 1/8th or 1/20th of 1%
+
+Zero Coupons Not Allowed
+
+
+
+
+
+
+
+
+  Insurance
+
+
+No
+
+
+
+
+
+
+  Other Details
+
+
+The maximum NIC is 4.50%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Bid Format
+
+
+All-Or-None
+
+
+
+
+
+
+  Auction Format 
+
+
+Open
+
+
+
+
+
+
+  Award Basis
+												
+
+
+TIC to Dated Date
+
+
+
+
+
+
+  Two-Minute Rule 
+												 
+
+
+Yes
+
+
+
+
+
+
+  Bond Counsel
+
+
+Butler Snow LLP
+ 
+Denver, CO
+
+
+
+
+
+
+  Web 
+												Site
+
+
+www.MuniAuction.com
+
+
+
+
+
+
+  Contact
+
+
+Hilltop Securities, Inc.
+Denver, CO
+Attn: Jason Simmons
+Phone: 720-347-8953
+Email: 
+jason.simmons@hilltopsecurities.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terms as of 11/21/2020 @ 7:25 am
+
+
+1
+Preliminary, subject to change
+2
+Check offering documents or with Issuer and/or FA 
+							to ascertain if settlement is Firm or Tentative.
+						
+*
+ 
+							Disclaimer: This Term Sheet is provided by Grant 
+							Street Group for informational purposes and the 
+							convenience of bidders. Grant Street Group is not 
+							responsible for any inaccuracy in the information 
+							displayed. Bidders should carefully review the 
+							Notice of Sale and Preliminary Official Statement and decide whether 
+							to purchase Bonds solely on the basis of the information 
+							provided therein.
+	
+					
+
+
+
+
+
+
+
+						[ 
+Print Page
+ ] 
+						   
+                        
+					
+
+
+
+
+
+
+
+
+

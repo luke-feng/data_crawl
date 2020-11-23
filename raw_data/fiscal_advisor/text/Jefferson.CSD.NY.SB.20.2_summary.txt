@@ -1,0 +1,382 @@
+
+
+
+
+Fiscal Advisors Auction: AON Auction Results: Jefferson.CSD.NY.SB.20.2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Thu., Nov 19, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605783600000;
+			
+06:00:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605798000000;
+			
+
+
+10:00:00 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+10:00:53 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+$100,655
+
+
+		Jefferson Central School District, Schoharie County, New York
+
+		School District (Serial) Bonds, 2020 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+NIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+GREE-JH
+
+
+
+Greene County Commercial Bank
+
+
+1.242150%
+9:35:33 am
+
+$3,734.59
+
+
+(0.00)
+
+
+$3,734.59
+
+
+
+
+
+
+2nd
+
+
+DELH-BB
+
+
+
+The Delaware National Bank of Delhi
+
+
+1.950000%
+9:11:09 am
+
+$5,862.77
+
+
+(0.00)
+
+
+$5,862.77
+
+
+
+
+
+
+3rd
+
+
+ROOS-ST
+
+
+
+Roosevelt & Cross
+
+
+2.466195%
+9:58:02 am
+
+$7,414.74
+
+
+(0.00)
+
+
+$7,414.74
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Note:
+ May not include sealed bids 
+						received outside of Fiscal Advisors Auction 
+						system.
+
+
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+DELH-BB
+,
+
+GREE-JH
+,
+
+ROOS-ST
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Jefferson%2ECSD%2ENY%2ESB%2E20%2E2","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+Rules
+, 
+
+Selections
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+Fiscal Advisors Auction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about a sale call Fiscal Advisors & Marketing, Inc. at (315) 752-0051.
+
+
+
+            For auction support call (412) 391-5555 ext 1370 or email
+            the 
+Auction Administrator
+.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+

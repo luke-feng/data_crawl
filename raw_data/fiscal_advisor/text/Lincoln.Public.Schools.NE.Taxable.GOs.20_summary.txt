@@ -1,0 +1,516 @@
+
+
+
+
+MuniAuction: AON Auction Results: Lincoln.Public.Schools.NE.Taxable.GOs.20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Wed., Nov 18, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605716100000;
+			
+11:15:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605717000000;
+			
+
+
+11:30:00 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+11:31:10 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+NOTICE:
+
+
+
+				 
+                 Underwriter's discount shall not exceed 0.70%
+				 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$122,000,000
+*
+
+
+		Lancaster County School District 0001 (Lincoln Public Schools), Nebraska
+
+		General Obligation Refunding Bonds
+(Taxable Interest)
+Series 2020 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+RWBA-DK
+
+
+
+Robert Baird
+
+
+1.753676%
+11:27:41 am
+
+$24,037,059.08
+
+
+(2,158,701.81)
+
+
+$21,878,357.27
+
+
+
+
+
+
+2nd
+
+
+MORG-JJ
+
+
+
+Morgan Stanley
+
+
+1.778425%
+11:29:49 am
+
+$21,874,557.54
+
+
+203,343.02
+
+
+$22,077,900.56
+
+
+
+
+
+
+3rd
+
+
+JPMO-JM
+
+
+
+JP Morgan Securities
+
+
+1.885297%
+11:29:09 am
+
+$22,833,958.50
+
+
+527,734.68
+
+
+$23,361,693.18
+
+
+
+
+
+
+4th
+
+
+WACH-WI
+
+
+
+Wells Fargo Securities
+
+
+1.909895%
+11:29:19 am
+
+$22,838,169.67
+
+
+765,044.10
+
+
+$23,603,213.77
+
+
+
+
+
+
+5th
+
+
+CITI-CR
+
+
+
+Citigroup
+
+
+1.927781%
+11:29:45 am
+
+$23,208,583.63
+
+
+678,886.40
+
+
+$23,887,470.03
+
+
+
+
+
+
+6th
+
+
+TDSE-JF
+
+
+
+TD Securities (USA), LLC
+
+
+2.090732%
+11:29:42 am
+
+$25,759,635.88
+
+
+238,679.55
+
+
+$25,998,315.43
+
+
+
+
+
+
+
+
+
+
+
+
+
+		*Preliminary, subject to change
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+CITI-CR
+,
+
+JPMO-JM
+,
+
+MORG-JJ
+,
+
+RWBA-DK
+,
+
+TDSE-JF
+,
+
+WACH-WI
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Lincoln%2EPublic%2ESchools%2ENE%2ETaxable%2EGOs%2E20","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+POS
+, 
+Rules
+ 
+(modified 5/24/2018 @ 5:50 pm)
+, 
+
+Selections
+,
+
+Results
+
+
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+ Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For assistance, call MuniAuction at (412) 391-5555 x370.
+
+
+
+        Please direct questions and comments regarding bidding procedures to the
+        
+Auction Administrator
+
+        or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            Copyright © 1997-2020 Grant Street Group. All rights reserved.
+
+                            Grant Street Group's auction services are protected by 
+U.S. Patent Nos. 
+6,161,099
+, 
+7,523,063
+, and patents pending.
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

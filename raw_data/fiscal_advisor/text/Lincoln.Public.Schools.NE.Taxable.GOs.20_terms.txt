@@ -1,0 +1,495 @@
+
+
+
+
+
+
+
+
+
+
+Terms: Lincoln.Public.Schools.NE.Taxable.GOs.20
+
+
+
+				function nav_to_parent(link)
+				{
+					if (opener)
+					{
+						opener.location.href = link;
+						opener.focus();
+					}
+					else
+					{
+						window.open(link);
+					}
+					self.close();
+				}
+			
+
+
+
+
+
+
+
+
+
+
+
+
+TERMS*
+
+
+
+						[ 
+Print Page
+ ] 	
+						   
+                        
+					
+
+
+
+
+
+
+Lincoln.Public.Schools.NE.Taxable.GOs.20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Issuer
+
+
+Lancaster County School District 0001 (Lincoln Public Schools)
+
+
+
+
+
+
+  State
+
+
+Nebraska
+
+
+
+
+
+
+  
+												Amount
+1
+
+
+$122,000,000
+
+
+
+
+
+
+  Type 
+												Issue/Series  
+
+
+General Obligation Refunding Bonds
+  (Taxable Interest)
+  Series 2020
+
+
+
+
+
+
+  
+												Rating  
+
+
+Moody's: 
+Aa1
+S&P: 
+AAA
+
+
+
+
+
+
+  Bank 
+												Qualified
+
+
+No
+
+
+
+
+
+
+  
+												Good Faith
+
+
+Successful bidder - $1,220,000 wire to Issuer by 3pm ET on day of sale
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Sale Date 
+
+
+11/18/20
+
+
+
+
+
+
+  
+												Dated Date
+
+
+12/03/20
+
+
+
+
+
+
+  Settlement 
+												Date
+2
+ 
+
+
+ 
+            12/03/20
+                                            
+
+
+
+
+
+
+  
+												Sale Time
+
+
+11:15 AM - 11:30 AM Eastern Time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Interest Due
+
+
+7/15, 1/15
+
+
+
+
+
+
+  Principal Due
+
+
+1/15/22 - 1/15/39
+
+
+
+
+
+
+  First Interest 
+												Date  
+
+
+7/15/21
+
+
+
+
+
+
+  Call Dates
+
+
+7/15/30 @ Par
+
+
+
+
+
+
+  Term Bonds
+
+
+Allowed - Starting 2022  - Max 2 
+
+
+
+
+
+
+  
+												Min. Bid Price 
+												 
+
+
+99.000%
+
+
+
+
+
+
+  Bid Details
+
+
+
+												Multiple: Either 1/8th or 1/20th of 1%
+
+Zero Coupons Not Allowed
+
+
+
+
+
+
+
+
+  Insurance
+
+
+No
+
+
+
+
+
+
+  Other Details
+
+
+Underwriter's discount shall not exceed 0.70%
+No bid offering to purchase the Bonds which reflects a present value savings of less than approximately 4.0% of the refunded bonds will be considered.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Bid Format
+
+
+All-Or-None
+
+
+
+
+
+
+  Auction Format 
+
+
+Closed
+
+
+
+
+
+
+  Award Basis
+												
+
+
+TIC to Dated Date
+
+
+
+
+
+
+  Two-Minute Rule 
+												 
+
+
+No
+
+
+
+
+
+
+  Bond Counsel
+
+
+Gilmore & Bell, P.C.
+ 
+Omaha, NE
+
+
+
+
+
+
+  Web 
+												Site
+
+
+www.MuniAuction.com
+
+
+
+
+
+
+  Contact
+
+
+Piper Sandler & Co.
+Lincoln, NE 
+Attn:  Scott Keene
+Phone: 402-325-1199
+Email: 
+scott.keene@psc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terms as of 11/21/2020 @ 7:25 am
+
+
+1
+Preliminary, subject to change
+2
+Check offering documents or with Issuer and/or FA 
+							to ascertain if settlement is Firm or Tentative.
+						
+*
+ 
+							Disclaimer: This Term Sheet is provided by Grant 
+							Street Group for informational purposes and the 
+							convenience of bidders. Grant Street Group is not 
+							responsible for any inaccuracy in the information 
+							displayed. Bidders should carefully review the 
+							Notice of Sale and Preliminary Official Statement and decide whether 
+							to purchase Bonds solely on the basis of the information 
+							provided therein.
+	
+					
+
+
+
+
+
+
+
+						[ 
+Print Page
+ ] 
+						   
+                        
+					
+
+
+
+
+
+
+
+
+

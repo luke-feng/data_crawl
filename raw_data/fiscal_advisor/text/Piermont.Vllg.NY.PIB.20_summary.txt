@@ -1,0 +1,342 @@
+
+
+
+
+Fiscal Advisors Auction: AON Auction Results: Piermont.Vllg.NY.PIB.20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Wed., Nov 18, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605697200000;
+			
+06:00:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605711600000;
+			
+
+
+10:00:00 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+10:14:34 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+NOTICE:
+
+
+
+				 
+                 The premium bid, if any, shall not exceed $100,000
+				 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$1,036,967
+
+
+		Village of Piermont, Rockland County, New York
+
+		Public Improvement (Serial) Bonds - 2020 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+NIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+GREE-JH
+
+
+
+Greene County Commercial Bank
+
+
+2.020000%
+8:37:43 am
+
+$238,228.47
+
+
+(0.00)
+
+
+$238,228.47
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Note:
+ May not include sealed bids 
+						received outside of Fiscal Advisors Auction 
+						system.
+
+
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+GREE-JH
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Piermont%2EVllg%2ENY%2EPIB%2E20","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+Amendments
+ 
+(modified 11/13/2020 @ 4:23 pm EST)
+, 
+
+Rules
+, 
+
+Selections
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+Fiscal Advisors Auction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about a sale call Fiscal Advisors & Marketing, Inc. at (315) 752-0051.
+
+
+
+            For auction support call (412) 391-5555 ext 1370 or email
+            the 
+Auction Administrator
+.
+            
+
+
+
+
+
+
+
+
+
+
+
+
+

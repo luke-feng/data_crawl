@@ -1,0 +1,587 @@
+
+
+
+
+MuniAuction: AON Auction Results: Denver.GOs.20B.AON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Tue., Nov 17, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605630600000;
+			
+11:30:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605632616000;
+			
+
+
+12:03:36 pm
+
+
+
+
+
+
+
+
+Last Update
+
+
+12:04:52 pm
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+
+
+
+				  Auction Closed At 12:03:36 pm 
+				 
+
+
+
+
+
+
+ 
+
+
+
+
+NOTICE:
+
+
+
+				 
+                 No Bonds mature in 2022
+				 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$231,755,000
+*
+
+
+		City and County of Denver, Colorado
+
+		General Obligation Better Denver Refunding Bonds, 
+Series 2020B 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+MORG-DK
+
+
+
+Morgan Stanley
+
+
+0.613723%
+12:01:36 pm
+
+$87,694,540.28
+
+
+(74,968,129.22)
+
+
+$12,726,411.06
+
+
+
+
+
+
+2nd
+
+
+MERR-AM
+
+
+
+Bank of America Merrill Lynch
+
+
+0.617305%
+12:00:46 pm
+
+$87,694,540.28
+
+
+(74,895,676.40)
+
+
+$12,798,863.88
+
+
+
+
+
+
+3rd
+
+
+WELL-RW
+
+
+
+Wells Fargo Securities
+
+
+0.618724%
+12:03:13 pm
+
+$87,694,540.28
+
+
+(74,866,969.92)
+
+
+$12,827,570.36
+
+
+
+
+
+
+4th
+
+
+CITI-CR
+
+
+
+Citigroup
+
+
+0.624828%
+12:01:20 pm
+
+$87,694,540.28
+
+
+(74,743,581.00)
+
+
+$12,950,959.28
+
+
+
+
+
+
+5th
+
+
+RBCD-JD
+
+
+
+RBC Capital Markets
+
+
+0.625622%
+12:02:24 pm
+
+$78,962,180.28
+
+
+(66,189,744.65)
+
+
+$12,772,435.63
+
+
+
+
+
+
+6th
+
+
+JPMO-JM
+
+
+
+JP Morgan Securities
+
+
+0.626929%
+12:02:43 pm
+
+$87,694,540.28
+
+
+(74,701,124.57)
+
+
+$12,993,415.71
+
+
+
+
+
+
+7th
+
+
+GOLD-SD
+
+
+
+Goldman Sachs
+
+
+0.631579%
+12:02:36 pm
+
+$87,694,540.28
+
+
+(74,607,173.15)
+
+
+$13,087,367.13
+
+
+
+
+
+
+8th
+
+
+HANI-MI
+
+
+
+Stifel Nicolaus
+
+
+0.725200%
+12:03:28 pm
+
+$75,437,427.78
+
+
+(60,867,896.10)
+
+
+$14,569,531.68
+
+
+
+
+
+
+
+
+
+
+
+
+
+		*Preliminary, subject to change
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+CITI-CR
+,
+
+GOLD-SD
+,
+
+HANI-MI
+,
+
+JPMO-JM
+,
+
+MERR-AM
+,
+
+MORG-DK
+,
+
+RBCD-JD
+,
+
+UBS-MC
+,
+
+WELL-RW
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Denver%2EGOs%2E20B%2EAON","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+POS
+, 
+Rules
+ 
+(modified 5/24/2018 @ 5:50 pm)
+, 
+
+Selections
+,
+
+Results
+
+
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+ Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For assistance, call MuniAuction at (412) 391-5555 x370.
+
+
+
+        Please direct questions and comments regarding bidding procedures to the
+        
+Auction Administrator
+
+        or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            Copyright © 1997-2020 Grant Street Group. All rights reserved.
+
+                            Grant Street Group's auction services are protected by 
+U.S. Patent Nos. 
+6,161,099
+, 
+7,523,063
+, and patents pending.
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

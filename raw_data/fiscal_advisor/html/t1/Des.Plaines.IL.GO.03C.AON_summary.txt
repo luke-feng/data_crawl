@@ -1,0 +1,539 @@
+
+
+
+
+SpeerAuction: AON Auction Results: Des.Plaines.IL.GO.03C.AON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ranked Results: Des.Plaines.IL.GO.03C.AON
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+
+Auction Type
+
+
+Start
+
+
+End
+
+
+Last Update
+
+
+Auction Status
+
+
+
+
+
+
+Mon., Aug 4, 2003
+ AON 
+
+
+
+
+
+				var auction_start_time = 1060009200000;
+			
+11:00:00 am
+		
+
+
+
+
+
+				var auction_end_time = 1060011000000;
+			
+
+
+11:30:00 am
+11:30:22 am
+ EDT
+Over
+
+
+
+
+
+
+
+
+
+
+$6,915,000
+*
+
+
+		City of Des Plaines
+Cook County, Illinois
+
+		Taxable General Obligation Bonds
+Series 2003C 
+			
+
+
+
+
+
+
+
+
+
+
+
+
+Best AON Bidder:
+
+
+Best AON TIC:
+
+
+
+
+
+
+Griffin,Kubik,Stephens & Thompson, Inc
+
+
+
+5.1433 %
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rank
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Gross Interest
+
+
+Plus Discount/
+(Less Premium)
+
+
+Total Interest Cost
+
+
+
+
+
+
+1st
+
+
+GRIF-RB
+
+
+Insured
+
+
+
+
+Griffin,Kubik,Stephens & Thompson, Inc
+
+
+5.1433%
+11:26:21 am
+
+$3,155,369.38
+
+
+(664.00)
+
+
+$3,154,705.38
+
+
+
+
+
+
+2nd
+
+
+PAIN-TM
+
+
+Insured
+
+
+
+
+UBS Financial Services Inc.
+
+
+5.2022%
+11:26:41 am
+
+$3,137,695.62
+
+
+52,213.65
+
+
+$3,189,909.27
+
+
+
+
+
+
+3rd
+
+
+RBCD-JB
+
+
+Insured
+
+
+
+
+RBC Dain Rauscher
+
+
+5.2345%
+11:28:22 am
+
+$3,133,238.75
+
+
+66,490.45
+
+
+$3,199,729.20
+
+
+
+
+
+
+4th
+
+
+LEGG-MM
+
+
+Insured
+
+
+
+
+Legg Mason Wood Walker, Inc
+
+
+5.2980%
+11:29:12 am
+
+$3,182,800.00
+
+
+64,031.40
+
+
+$3,246,831.40
+
+
+
+
+
+
+5th
+
+
+BERN-GD
+
+
+Insured
+
+
+
+
+Bernardi Securities
+
+
+5.3408%
+11:23:09 am
+
+$3,181,937.81
+
+
+69,146.95
+
+
+$3,251,084.76
+
+
+
+
+
+
+6th
+
+
+USBP-AO
+
+
+Insured
+
+
+
+
+USB Piper Jaffray
+
+
+5.4689%
+11:29:26 am
+
+$3,299,581.88
+
+
+42,149.60
+
+
+$3,341,731.48
+
+
+
+
+
+
+
+
+
+
+Best AON
+Insured
+   
+
+
+
+Griffin,Kubik,Stephens & Thompson, Inc (
+GRIF-RB
+)
+
+
+5.1433%
+
+
+$3,155,369.38
+
+
+(664.00)
+
+
+$3,154,705.38
+
+
+
+
+
+
+Cover AON
+Insured
+   
+
+
+
+UBS Financial Services Inc. (
+PAIN-TM
+)
+
+
+5.2022%
+
+
+$3,137,695.62
+
+
+52,213.65
+
+
+$3,189,909.27
+
+
+
+
+*Preliminary, subject to change
+
+ Bidder specified Insurance, see individual bidder page for details.
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+BERN-GD
+,
+
+GRIF-RB
+,
+
+LEGG-MM
+,
+
+PAIN-TM
+,
+
+RBCD-JB
+,
+
+RWBA-DK
+,
+
+USBP-AO
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = get_element("rank_auction_results_button");
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Des%2EPlaines%2EIL%2EGO%2E03C%2EAON","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+Amendments
+ (modified 7/31/2003 @ 4:48 pm)
+, 
+
+POS
+, 
+Rules
+, 
+
+Selections
+,
+
+Results
+
+
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+SpeerAuction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about this bond sale, call Speer Financial, Inc. at (312) 346-3700.
+
+
+Please direct questions and comments regarding bidding procedures to the
+
+Auction Administrator
+ or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

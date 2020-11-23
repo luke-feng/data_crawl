@@ -1,0 +1,564 @@
+
+
+
+
+SpeerAuction: AON Auction Results: Collinsville.IL.GOFB.20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Wed., Nov 18, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605714300000;
+			
+10:45:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605715371000;
+			
+
+
+11:02:51 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+11:52:02 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+
+
+
+				  Auction Closed At 11:02:51 am (Extended 3 times)  
+				 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+$7,540,000
+*
+
+
+		City of Collinsville, Madison and St. Clair Counties, Illinois
+
+		General Obligation Refunding Bonds, Series 2020  
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+Bid
+No.
+
+
+Cumulative
+Improvement
+
+
+Open Auction
+Savings
+
+
+
+
+
+
+1st
+
+
+BNYM-AR
+
+
+
+BNY Mellon Capital Markets
+
+
+0.731756%
+11:00:51 am
+
+$1,089,000.00
+
+
+(874,000.00)
+
+
+$215,000.00
+
+
+7
+
+
+0.278977%
+
+
+$ 36,453.26
+
+
+
+
+
+
+2nd
+
+
+RWBA-DK
+
+
+
+Robert Baird
+
+
+0.741482%
+10:59:47 am
+
+$1,361,250.00
+
+
+(1,138,551.70)
+
+
+$222,698.30
+
+
+2
+
+
+0.116933%
+
+
+-
+
+
+
+
+
+
+3rd
+
+
+FIFT-GK
+
+
+
+Fifth Third Securities
+
+
+0.770606%
+11:01:17 am
+
+$1,089,000.00
+
+
+(862,795.30)
+
+
+$226,204.70
+
+
+7
+
+
+0.273859%
+
+
+-
+
+
+
+
+
+
+4th
+
+
+COMM-MK
+
+
+
+Commerce Bank
+
+
+0.790728%
+11:02:48 am
+
+$544,500.00
+
+
+(322,922.33)
+
+
+$221,577.67
+
+
+5
+
+
+0.091585%
+
+
+-
+
+
+
+
+
+
+5th
+
+
+NORT-DS
+
+
+
+Northland Securities
+
+
+0.857255%
+11:01:09 am
+
+$1,089,000.00
+
+
+(837,879.40)
+
+
+$251,120.60
+
+
+6
+
+
+1.050667%
+
+
+-
+
+
+
+
+
+
+6th
+
+
+KEYB-RC
+
+
+
+KeyBanc Capital Markets
+
+
+1.047674%
+10:58:10 am
+
+$816,750.00
+
+
+(518,107.10)
+
+
+$298,642.90
+
+
+2
+
+
+0.095171%
+
+
+-
+
+
+
+
+Total Bids: 
+29
+
+
+&nbsp
+
+
+
+
+
+
+
+
+
+
+
+		*Preliminary, subject to change
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+BNYM-AR
+,
+
+COMM-MK
+,
+
+FIFT-GK
+,
+
+KEYB-RC
+,
+
+NORT-DS
+,
+
+RWBA-DK
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Collinsville%2EIL%2EGOFB%2E20","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+Amendments
+ 
+(modified 11/17/2020 @ 5:43 pm EST)
+, 
+
+POS
+, 
+Rules
+, 
+
+Selections
+,
+
+Results
+
+
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+SpeerAuction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about this bond sale, call Speer Financial, Inc. at (312) 346-3700.
+
+
+
+        Please direct questions and comments regarding bidding procedures to the
+        
+Auction Administrator
+
+        or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

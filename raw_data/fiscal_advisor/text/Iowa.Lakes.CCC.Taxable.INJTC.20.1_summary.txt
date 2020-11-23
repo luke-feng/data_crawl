@@ -1,0 +1,395 @@
+
+
+
+
+SpeerAuction: AON Auction Results: Iowa.Lakes.CCC.Taxable.INJTC.20.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auction Date
+
+	Tue., Nov 17, 2020
+		
+
+
+
+
+
+
+
+
+Type
+
+	AON
+		
+
+
+
+
+
+
+
+
+Start
+
+
+
+				var auction_start_time = 1605628800000;
+			
+11:00:00 am
+
+
+
+
+
+
+
+
+End
+
+
+
+				var auction_end_time = 1605630600000;
+			
+
+
+11:30:00 am
+
+
+
+
+
+
+
+
+Last Update
+
+
+11:33:47 am
+ EST
+
+
+
+
+
+
+
+
+Status
+
+
+Over
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+$795,000
+*
+
+
+		Iowa Lakes Community College (Merged Area III), Iowa
+
+		Taxable Industrial New Jobs Training Certificates, Series 2020-1 
+			
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bidder
+
+
+Firm
+
+
+TIC
+
+
+Time
+
+
+Gross Interest
+
+
++ Discount/
+(Premium)
+
+
+Total Interest
+
+
+
+
+
+
+1st
+
+
+BANK-SA
+
+
+
+Bankers' Bank
+
+
+1.268390%
+11:14:32 am
+
+$47,127.46
+
+
+3,975.00
+
+
+$51,102.46
+
+
+
+
+
+
+2nd
+
+
+UMBB-KK
+
+
+
+UMB Bank
+
+
+1.475674%
+11:16:16 am
+
+$53,190.61
+
+
+6,110.05
+
+
+$59,300.66
+
+
+
+
+
+
+3rd
+
+
+NORT-DS
+
+
+
+Northland Securities
+
+
+1.889908%
+11:27:13 am
+
+$69,637.22
+
+
+6,360.00
+
+
+$75,997.22
+
+
+
+
+
+
+
+
+
+
+
+
+
+		*Preliminary, subject to change
+
+Note:
+ May not include sealed bids 
+						received outside of SpeerAuction 
+						system.
+
+
+
+
+
+Click below to see other bidder results
+
+
+AON bids:
+
+
+BANK-SA
+,
+
+NORT-DS
+,
+
+UMBB-KK
+,
+
+Best Bid
+,
+
+Cover Bid
+
+
+
+
+
+				function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+			
+
+
+
+
+Go to: 
+
+
+
+
+
+				function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Iowa%2ELakes%2ECCC%2ETaxable%2EINJTC%2E20%2E1","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+			
+
+
+Terms
+,
+		
+Notice of Sale
+,
+
+POS
+, 
+Rules
+, 
+
+Selections
+,
+
+Results
+
+
+
+
+
+
+
+
+
+
+Exit to: 
+
+
+SpeerAuction Home Page
+
+
+
+
+
+
+
+
+
+
+
+
+For information about this bond sale, call Speer Financial, Inc. at (312) 346-3700.
+
+
+
+        Please direct questions and comments regarding bidding procedures to the
+        
+Auction Administrator
+
+        or call (412) 391-5555.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

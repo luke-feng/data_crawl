@@ -1,0 +1,93 @@
+Fiscal Advisors Auction: AON Auction Results: Moravia.CSD.NY.SB.20
+Auction Date
+Tue., Sep 15, 2020
+Type
+AON
+Start
+var auction_start_time = 1600164000000;
+06:00:00 am
+End
+var auction_end_time = 1600178400000;
+10:00:00 am
+Last Update
+10:00:34 am
+EDT
+Status
+Over
+NOTICE:
+The amount of the premium bid, if any, shall not exceed $14,500
+$362,000
+Moravia Central School District, Cayuga County, New York
+School District (Serial) Bonds, 2020
+Bidder
+Firm
+NIC
+Time
+Gross Interest
++ Discount/
+(Premium)
+Total Interest
+1st
+GREE-JH
+Greene County Commercial Bank
+1.130524%
+9:45:22 am
+$12,344.38
+(0.00)
+$12,344.38
+2nd
+SAGE-CH
+Sage Rutty & Co., NC
+1.201557%
+9:18:20 am
+$13,120.00
+(0.00)
+$13,120.00
+3rd
+ROOS-ST
+Roosevelt & Cross
+1.240783%
+9:57:48 am
+$13,548.31
+(0.00)
+$13,548.31
+Note:
+May not include sealed bids 
+						received outside of Fiscal Advisors Auction 
+						system.
+Click below to see other bidder results
+AON bids:
+GREE-JH
+,
+ROOS-ST
+,
+SAGE-CH
+,
+Best Bid
+,
+Cover Bid
+function autorefresh()
+				{
+					var elem = document.getElementById('refresh_button');
+					if (elem) elem.click();
+				}
+Go to:
+function open_terms()
+				{
+					var my_win = window.open("/perl/bond.pl?view_terms_button=ViewTerms&auction_name=Moravia%2ECSD%2ENY%2ESB%2E20","Terms","width=400,height=650,resizable=yes,scrollbars=yes");
+					my_win.focus();
+				}
+Terms
+,
+Notice of Sale
+,
+Rules
+,
+Selections
+Exit to:
+Fiscal Advisors Auction Home Page
+For information about a sale call Fiscal Advisors & Marketing, Inc. at (315) 752-0051.
+For auction support call (412) 391-5555 ext 1370 or email
+            the
+Auction Administrator
+.

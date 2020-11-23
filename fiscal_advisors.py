@@ -92,7 +92,7 @@ def get_text(url):
     page = get_page(url)
     if page is not None:
         soup = BeautifulSoup(page, 'lxml')
-        text = soup.get_text(separator='\n', strip=True)
+        text = soup.get_text(separator='\n')
     else:
         text = ''
     return text
@@ -245,14 +245,28 @@ def get_all_local_text(dataFilePath):
     localTextFile = {}
     # get all file
     for fname in fileList:
-        file = []
         if ".txt" in fname:
             fileName = os.path.join(dataFilePath, fname)
             with open(fileName, 'r') as f:
+                file = []
                 for line in f:
-                    line = line.strip()
-                    file.append(line)
-            localTextFile[fileName] = file
+                    if line == '\n' or line == '' or 'var ' in line:
+                        continue
+                    else:
+                        line = line.replace('&nbsp', ' ')
+                        line = line.strip()
+                        file.append(line)
+                n_file = []
+                for bi, line in enumerate(file):
+                    if line == 'Bidder' or line == 'Due':
+                        break
+                    elif line != '':
+                        n_file.append(line)
+                    else:
+                        continue
+                for i in range(bi, len(file)):
+                    n_file.append(file[i])
+                localTextFile[fileName] = n_file
     return localTextFile
 
 
@@ -320,8 +334,7 @@ def get_term_result(allValue, termName, localTextFile):
     """
     if termName in localTextFile:
         tText = localTextFile[termName]
-        for line in tText:
-            currentIndex = tText.index(line)
+        for currentIndex, line in enumerate(tText):
             line = line.strip()
             if line == 'Issuer':
                 termIssuer = tText[currentIndex+1]
@@ -464,10 +477,10 @@ def get_results_pattern1(fileTitle, dataFilePath, localTextFile):
                 types = text[currentIndex+1]
                 allValue['types'] = types
             elif line == 'Start':
-                start = text[currentIndex+2]
+                start = text[currentIndex+1]
                 allValue['start'] = start
             elif line == 'End':
-                end = text[currentIndex+2]
+                end = text[currentIndex+1]
                 allValue['end'] = end
             elif line == 'Last Update':
                 lastUpdate = text[currentIndex+1]
@@ -503,15 +516,272 @@ def get_results_pattern1(fileTitle, dataFilePath, localTextFile):
                     description = description+text[i]+'\n'
                     i += 1
                 allValue['description'] = description
+            
             elif line == 'Bidder':
-                i = currentIndex
-                form = ''
-                while 'Preliminary' not in text[i] and 'Click below' not in text[i] and 'Bid not'not in text[i]:
-                    if text[i] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i]) is not None:
-                        form = form+'\n'+text[i]
-                    else:
-                        form = form+'| '+text[i]
-                    i += 1
+                if text[currentIndex+9].startswith('No.'):
+                    i = 12
+                    form = ' | Bidder | Firm | NIC | Time | Gross Interest | Plus Discount/(Less Premium) | Total Interest Cost | Bid No. | Cumulative Improvement'
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+
+                elif text[currentIndex+10].startswith('No.'):
+                    i = 13
+                    form = ' | Bidder | Firm | TIC | Time | Purchase Price | Gross Interest | Plus Discount/(Less Premium) | Total Interest | Bid No. | Cumulative Improvement'
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                    print(fileTitle)    
+                    print(form)
+                elif text[currentIndex+4].startswith('Gross'):
+                    i = 8
+                    form = ' | Bidder | Firm | NIC | Time | Gross Interest | Plus Discount/(Less Premium) | Total Interest Cost '
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex+4].startswith('1st'):
+                    i = 4
+                    form = ' | Bidder | Firm | NIC | Time  '
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex+3].startswith('Blended'):
+                    i = 10
+                    form = ' | Bidder | Firm | TIC | Blended TIC | Time | Gross Interest | Plus Discount/(Less Premium) | Total Interest '
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex+3].startswith('Blended'):
+                    i = 10
+                    form = ' | Bidder | Firm | TIC | Blended TIC | Time | Gross Interest | Plus Discount/(Less Premium) | Total Interest '
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex+4].startswith('Purchase') and  text[currentIndex+10].startswith('No.') is False:
+                    i = 9
+                    form = ' | Bidder | Firm | TIC | Time | Purchase Price | Gross Interest | Plus Discount/(Less Premium) | Total Interest '
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex+2].startswith('BABs ') or text[currentIndex+3].startswith('BABs '):
+                    i = 5
+                    form = ' | {} | {} | {} | {} | {} '.format(text[currentIndex], text[currentIndex+1], text[currentIndex+2], text[currentIndex+3], text[currentIndex+4])
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] in ['1st', '2nd', '3rd', 'Total Bids:']:
+                            form = form+'\n'+text[currentIndex+i]
+                        elif re.match(r'\d*th', text[currentIndex+i]):
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Gross ') is False and text[currentIndex+3].startswith('Purchase') is False:
+                    i = -1
+                    j = 0
+                    form = ''
+                    while 'Best AON' not in text[currentIndex+i]:
+                        i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 3 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if text[currentIndex+i] in ['Best AON', 'Cover AON']:
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                    
+                elif text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Purchase'):
+                    i = -1
+                    j = 0
+                    form = ''
+                    while 'Best AON' not in text[currentIndex+i]:
+                        i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 4 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if text[currentIndex+i] in ['Best AON', 'Cover AON']:
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                    
+                elif text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Gross Interest'):
+                    i = 6
+                    j = 0
+                    form = 'Bidder | Firm | NIC | Gross Interest | Plus Discount/(Less Premium) | Total Interest Cost \n'
+                    while 'Best AON' not in text[currentIndex+i]:
+                        i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 6 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if text[currentIndex+i] in ['Best AON', 'Cover AON']:
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                else:
+                    i = currentIndex-2
+                    form = ''
+                    while '*Preliminary' not in text[i] and ' Bidder' not in text[i] and 'Note:'not in text[i] \
+                            and 'Go to:'not in text[i] and '**Winner'not in text[i] and 'Bid not' not in text[i] and 'Click below' not in text[i]:
+                        i += 1
+                        if text[i] == '':
+                            text[i] = '- '
+                        if text[i] in ['1st', '2nd', '3rd', 'Best AON', 'Cover AON'] or re.match(r'\d+th', text[i]) is not None:
+                            form = form+'\n'+text[i]
+                        elif re.match(r'\d+:\d+:\d+', text[i]):
+                            continue
+                        elif text[i].isdigit():
+                            continue
+                        elif 'Inc.**' in text[i]:
+                            continue
+                        else:
+                            if (text[i-1] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i-1]) is not None) and '-' not in text[i]:
+                                form = form+'| ' '- ' + '| '+text[i]
+                            elif re.match(r'\d+:\d+:\d+', text[i+1]) and '$' in text[i+2]:
+                                form = form+'| ' + \
+                                    text[i] + ' ' + \
+                                    text[i+1]
+                            elif re.match(r'\d+:\d+:\d+', text[i+1]) and str(text[i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[i] + ' ' + \
+                                    text[i+1]+' ' + \
+                                    text[i+2]
+                            else:
+                                if 'Inc.**' in text[i+1]:
+                                    form = form+'| ' + \
+                                        text[i] + ' ' + \
+                                        text[i+1]
+                                else:
+                                    form = form+'| '+text[i]
                 allValue['form'] = form
             elif line.startswith('*Preliminary') or line.startswith('*Bid not') or line.startswith('Preliminary'):
                 statement = text[currentIndex]
@@ -577,6 +847,17 @@ def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
             elif line == 'Note:':
                 note = 'Note: '+text[currentIndex+1]
                 allValue['note'] = note
+            elif re.match(r'\$\d*', line) and text[currentIndex-1] == 'Over':
+                principal = text[currentIndex]
+                allValue['principal'] = principal
+                issuer = text[currentIndex+2]
+                allValue['issuer'] = issuer
+                i = currentIndex + 3
+                description = ''
+                while text[i].startswith('Best AON Bidder') is False:
+                    description = description+text[i]+'\n'
+                    i += 1
+                allValue['description'] = description
             elif re.match(r'\$\d*', line) is not None and text[currentIndex+1] == '*':
                 principal = text[currentIndex]
                 allValue['principal'] = principal
@@ -588,7 +869,7 @@ def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
                     description = description+text[i]+'\n'
                     i += 1
                 allValue['description'] = description
-            elif line.startswith('Best AON Bidder:') and text[currentIndex+2].startswith('Best MBM TIC:'):
+            elif line.startswith('Best AON Bidder:') and text[currentIndex+2].startswith('Best MBM'):
                 bestAONBidder = text[currentIndex+3] + \
                     '\n' + text[currentIndex+4]
                 bestAONTIC = text[currentIndex+5] + '\n' + text[currentIndex+6]
@@ -596,37 +877,173 @@ def get_results_pattern2(fileTitle, dataFilePath, localTextFile):
                 allValue['bestAONBidder'] = bestAONBidder
                 allValue['bestAONTIC'] = bestAONTIC
                 allValue['bestMBMTIC'] = bestMBMTIC
-            elif line.startswith('Best AON Bidder:') and text[currentIndex+2].startswith('Best MBM TIC:') is False:
+            elif line.startswith('Best AON Bidder:') and text[currentIndex+2].startswith('Best MBM') is False:
                 bestAONBidder = text[currentIndex+2]
-                bestAONTIC = text[currentIndex+3]
+                if 'Inc.' in text[currentIndex+3]:
+                    bestAONBidder = bestAONBidder + text[currentIndex+3]
+                    bestAONTIC = text[currentIndex+4]
+                else:
+                    bestAONTIC = text[currentIndex+3]
                 allValue['bestAONBidder'] = bestAONBidder
                 allValue['bestAONTIC'] = bestAONTIC
             elif line == 'Bidder':
-                if text[currentIndex-1].startswith('Rank') is False:
-                    i = 0
+                if text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Gross Interest') is False and text[currentIndex+3].startswith('Purchase') is False:
+                    i = -1
+                    j = 0
                     form = ''
                     while 'Best AON' not in text[currentIndex+i]:
-                        if i % 3 == 0:
-                            form = form+'\n'+text[currentIndex+i]
-                        else:
-                            form = form+'| '+text[currentIndex+i]
                         i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 3 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
                     while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
-                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i]:
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
                         if text[currentIndex+i] in ['Best AON', 'Cover AON']:
                             form = form+'\n'+text[currentIndex+i]
                         else:
                             form = form+'| '+text[currentIndex+i]
                         i += 1
-                else:
-                    i = currentIndex-1
+                elif text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Purchase'):
+                    i = -1
+                    j = 0
                     form = ''
-                    while '*Preliminary' not in text[i] and ' Bidder' not in text[i] and 'Note:'not in text[i] and 'Go to:'not in text[i] and '**Winner'not in text[i]:
+                    while 'Best AON' not in text[currentIndex+i]:
+                        i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 4 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
+
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if text[currentIndex+i] in ['Best AON', 'Cover AON']:
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+                elif text[currentIndex-1].startswith('Rank') is False and text[currentIndex+3].startswith('Gross Interest'):
+                    i = 6
+                    j = 0
+                    form = 'Bidder | Firm | NIC | Gross Interest | Plus Discount/(Less Premium) | Total Interest Cost \n'
+                    while 'Best AON' not in text[currentIndex+i]:
+                        i += 1
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if re.match(r'\d+:\d+:\d+', text[currentIndex+i]):
+                            continue
+                        elif text[currentIndex+i].isdigit():
+                            continue
+                        elif j % 6 == 0:
+                            form = form+'\n'+text[currentIndex+i]
+                            j += 1
+                        else:
+                            if re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and '$' in text[currentIndex+i+2]:
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]
+                                j += 1
+                            elif re.match(r'\d+:\d+:\d+', text[currentIndex+i+1]) and str(text[currentIndex+i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[currentIndex+i] + ' ' + \
+                                    text[currentIndex+i+1]+' ' + \
+                                    text[currentIndex+i+2]
+                                j += 1
+                            else:
+                                form = form+'| '+text[currentIndex+i]
+                                j += 1
+                    while '*Preliminary' not in text[currentIndex+i] and ' Bidder' not in text[currentIndex+i] and \
+                            'Note:'not in text[currentIndex+i] and 'Go to:'not in text[currentIndex+i] and '**Winner'not in text[currentIndex+i] \
+                    and 'Bid not' not in text[currentIndex+i] and 'Click below' not in text[currentIndex+i] and 'Bids not' not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
+                        if text[currentIndex+i] in ['Best AON', 'Cover AON']:
+                            form = form+'\n'+text[currentIndex+i]
+                        else:
+                            form = form+'| '+text[currentIndex+i]
+                        i += 1
+
+                else:
+                    i = currentIndex-2
+                    form = ''
+                    while '*Preliminary' not in text[i] and ' Bidder' not in text[i] and 'Note:'not in text[i] \
+                            and 'Go to:'not in text[i] and '**Winner'not in text[i] and 'Bid not' not in text[i] and 'Click below' not in text[i]:
+                        i += 1
+                        if text[i] == '':
+                            text[i] = '- '
                         if text[i] in ['1st', '2nd', '3rd', 'Best AON', 'Cover AON'] or re.match(r'\d+th', text[i]) is not None:
                             form = form+'\n'+text[i]
+                        elif re.match(r'\d+:\d+:\d+', text[i]):
+                            continue
+                        elif text[i].isdigit():
+                            continue
+                        elif 'Inc.**' in text[i]:
+                            continue
                         else:
-                            form = form+'| '+text[i]
-                        i += 1
+                            if (text[i-1] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i-1]) is not None) and '-' not in text[i]:
+                                form = form+'| ' '- ' + '| '+text[i]
+                            elif re.match(r'\d+:\d+:\d+', text[i+1]) and '$' in text[i+2]:
+                                form = form+'| ' + \
+                                    text[i] + ' ' + \
+                                    text[i+1]
+                            elif re.match(r'\d+:\d+:\d+', text[i+1]) and str(text[i+2]).isdigit():
+                                form = form+'| ' + \
+                                    text[i] + ' ' + \
+                                    text[i+1]+' ' + \
+                                    text[i+2]
+                            else:
+                                if 'Inc.**' in text[i+1]:
+                                    form = form+'| ' + \
+                                        text[i] + ' ' + \
+                                        text[i+1]
+                                else:
+                                    form = form+'| '+text[i]
                 allValue['form'] = form
             elif line.startswith('*Preliminary') or line.startswith(' Bidder') or line.startswith('**Winner'):
                 statement = text[currentIndex]
@@ -706,13 +1123,17 @@ def get_results_pattern3(fileTitle, dataFilePath, localTextFile):
                 if text[currentIndex-1].startswith('Rank') is False:
                     i = 0
                     form = ''
-                    while 'Best AON' not in text[currentIndex+i]:
+                    while 'Best AON' not in text[currentIndex+i] and '*Bid'not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
                         if i % 7 == 0:
                             form = form+'\n'+text[currentIndex+i]
                         else:
                             form = form+'| '+text[currentIndex+i]
                         i += 1
-                    while '*Preliminary' not in text[currentIndex+i]:
+                    while '*Preliminary' not in text[currentIndex+i] and '*Bid'not in text[currentIndex+i]:
+                        if text[currentIndex+i] == '':
+                            text[currentIndex+i] = '- '
                         if text[currentIndex+i] in ['Best AON', 'Cover AON']:
                             form = form+'\n'+text[currentIndex+i]
                         else:
@@ -721,12 +1142,15 @@ def get_results_pattern3(fileTitle, dataFilePath, localTextFile):
                 else:
                     i = currentIndex-1
                     form = ''
-                    while '*Preliminary' not in text[i]:
+                    while '*Preliminary' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            text[i] = '- '
                         if text[i] in ['1st', '2nd', '3rd', 'Best AON', 'Cover AON'] or re.match(r'\d+th', text[i]) is not None:
                             form = form+'\n'+text[i]
                         else:
                             form = form+'| '+text[i]
                         i += 1
+
                 allValue['form'] = form
             elif line.startswith('*Preliminary'):
                 statement = text[currentIndex]
@@ -795,7 +1219,9 @@ def get_results_pattern4(fileTitle, dataFilePath, localTextFile):
             elif line == 'Sep 1, 2002':
                 i = 0
                 form = 'Due| Principal Amount*| Coupon| Purchas| Price| Purchase Yield| MBM Winner**| Time'
-                while 'Preliminary,' not in text[currentIndex+i]:
+                while 'Preliminary,' not in text[currentIndex+i] and '*Bid'not in text[currentIndex+i]:
+                    if text[currentIndex+i] == '':
+                        text[currentIndex+i] = '- '
                     if text[currentIndex+i].startswith('Sep'):
                         form = form+'\n'+text[currentIndex+i]
                     else:
@@ -837,10 +1263,10 @@ def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
                 types = text[currentIndex+1]
                 allValue['types'] = types
             elif line == 'Start':
-                start = text[currentIndex+2]
+                start = text[currentIndex+1]
                 allValue['start'] = start
             elif line == 'End':
-                end = text[currentIndex+2]
+                end = text[currentIndex+1]
                 allValue['end'] = end
             elif line == 'Last Update':
                 lastUpdate = text[currentIndex+1]
@@ -851,7 +1277,9 @@ def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
                 if text[currentIndex+2] == 'NOTICE:':
                     i = currentIndex + 3
                     notice = 'NOTICE: '
-                    while text[i].startswith('$') is False:
+                    while i:
+                        if text[i].startswith('$') and 'by' not in text[i]:
+                            break
                         notice = notice + text[i]
                         i += 1
                     allValue['notice'] = notice
@@ -893,7 +1321,9 @@ def get_results_pattern5(fileTitle, dataFilePath, localTextFile):
             elif line == 'Bidder':
                 i = currentIndex
                 form = ''
-                while 'Note:' not in text[i] and 'Bid not submitted' not in text[i] and 'Click below ' not in text[i]:
+                while 'Note:' not in text[i] and 'Bid not submitted' not in text[i] and 'Click below ' not in text[i] and '*Bid'not in text[i] and '*Preliminary 'not in text[i]:
+                    if text[i] == '':
+                        text[i] = '- '
                     if text[i] in ['1st', '2nd', '3rd'] or re.match(r'\d+th', text[i]) is not None:
                         form = form+'\n'+text[i]
                     else:
@@ -975,9 +1405,11 @@ def get_results_pattern6(fileTitle, dataFilePath, localTextFile):
             elif line == 'Sep 1, 2002':
                 i = 0
                 form = 'Due| Principal Amount*| Coupon| Purchas| Price| Purchase Yield| MBM Winner**| Time'
-                while 'Preliminary,' not in text[currentIndex+i]:
+                while 'Preliminary,' not in text[currentIndex+i] and '*Bid'not in text[currentIndex+i]:
                     if text[currentIndex+i].startswith('Sep'):
                         form = form+'\n'+text[currentIndex+i]
+                    elif text[currentIndex+i] == '':
+                        form = form
                     else:
                         form = form+'| '+text[currentIndex+i]
                     i += 1
@@ -1045,6 +1477,7 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                 allValue['description'] = description
             elif line == 'Winner**:':
                 if text[currentIndex-1] == 'Best MBM TIC:':
+
                     bestAONBidder = text[currentIndex+1] +\
                         ' '+text[currentIndex+2]
                     bestAONTIC = text[currentIndex+3] +\
@@ -1054,17 +1487,7 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                     allValue['bestMBMTIC'] = bestMBMTIC
                     allValue['bestAONBidder'] = bestAONBidder
                     allValue['bestAONTIC'] = bestAONTIC
-                    form = 'Due| Principal Amount*| Serial Sinker/Term| Coupon'
-                    i = currentIndex + 16
-                    j = 0
-                    while 'Preliminary,' not in text[i]:
-                        if j % 4 == 0:
-                            form = form + '\n' + text[i]
-                        else:
-                            form = form + '| ' + text[i]
-                        j += 1
-                        i += 1
-                    allValue['form'] = form
+
                 elif text[currentIndex-1] == 'Best AON Bidder:':
                     bestMBMTIC = text[currentIndex+1] +\
                         ' '+text[currentIndex+2]
@@ -1075,16 +1498,94 @@ def get_results_pattern7(fileTitle, dataFilePath, localTextFile):
                     allValue['bestMBMTIC'] = bestMBMTIC
                     allValue['bestAONBidder'] = bestAONBidder
                     allValue['bestAONTIC'] = bestAONTIC
-                    form = 'Due| Principal Amount*| Coupon| Purchas| Price| Purchase Yield| MBM Winner**'
-                    i = currentIndex + 18
+            elif line == 'Due':
+                i = currentIndex
+                
+                if text[i+4] == 'Serial/' and text[i+8] == 'Price':
+                    
+                    form = '{}| {} | {}| {}| {}| {}'.format(text[i], text[i+1]+' '+text[i+2]+text[i+3], text[i+4]+' '+text[i+5]+text[i+6],text[i+7],text[i+8],text[i+9])
+                    i = i+10
                     j = 0
-                    while 'Preliminary,' not in text[i]:
-                        if j % 6 == 0:
+                    while 'Preliminary,' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            form = form
+                        elif j % 6 == 0:
                             form = form + '\n' + text[i]
                         else:
                             form = form + '| ' + text[i]
                         j += 1
                         i += 1
+                    allValue['form'] = form
+                    
+                elif text[i+5] == 'Price':
+                    form = '{}| {} | {}| {}| {}| {}'.format(text[i], text[i+1]+' '+text[i+2]+text[i+3], text[i+4],text[i+5],text[i+6],text[i+7])
+                    i = i+8
+                    j = 0
+                    
+                    while 'Preliminary,' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            form = form
+                        elif j % 6 == 0:
+                            form = form + '\n' + text[i]
+                            j += 1
+                        else:
+                            form = form + '| ' + text[i]
+                            j += 1
+                        i += 1
+                    
+                    allValue['form'] = form
+                elif text[i+5] == 'Purchase':
+                    form = '{}| {} | {}| {}| {}| {}'.format(text[i], text[i+1]+' '+text[i+2]+text[i+3], text[i+4],text[i+5]+ ' '+ text[i+6], text[i+7]+ ' '+ text[i+8], text[i+9])
+                    i = i+10
+                    j = 0
+                    
+                    while 'Preliminary,' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            form = form
+                        elif j % 6 == 0:
+                            form = form + '\n' + text[i]
+                            j += 1
+                        else:
+                            form = form + '| ' + text[i]
+                            j += 1
+                        i += 1
+                    
+                    allValue['form'] = form
+                elif text[i+8] == 'Reoffering':
+                    
+                    form = '{}| {} | {}| {} | {}'.format(text[i], text[i+1]+' '+text[i+2]+text[i+3], text[i+4]+' '+text[i+5]+text[i+6],text[i+7], text[i+8]+ ' '+ text[i+9])
+                    i = i+10
+                    j = 0
+                    
+                    while 'Preliminary,' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            form = form
+                        elif j % 5 == 0:
+                            form = form + '\n' + text[i]
+                            j += 1
+                        else:
+                            form = form + '| ' + text[i]
+                            j += 1
+                        i += 1
+                    
+                    allValue['form'] = form
+                else:
+                    
+                    form = '{}| {} | {}| {}'.format(text[i], text[i+1]+' '+text[i+2]+text[i+3], text[i+4]+' '+text[i+5]+text[i+6],text[i+7])
+                    i = i+8
+                    j = 0
+                    
+                    while 'Preliminary,' not in text[i] and '*Bid'not in text[i]:
+                        if text[i] == '':
+                            form = form
+                        elif j % 4 == 0:
+                            form = form + '\n' + text[i]
+                            j += 1
+                        else:
+                            form = form + '| ' + text[i]
+                            j += 1
+                        i += 1
+                    
                     allValue['form'] = form
             elif line.startswith('Preliminary,'):
                 statement = '*'+text[currentIndex]
@@ -1147,17 +1648,17 @@ def main():
     main function
     '''
     # the local file path for the results(.tsv and .xls), you need to change it to your local path, like: '/Users/user/Documents/raw_data/linkfilepath/'
-    linkFilePath = 'you need to change'
+    linkFilePath = ''
     # the local file path for the all rew data(.txt), you need to change it to your local path, like: '/Users/user/Documents/raw_data/datafilepath/'
-    dataFilePath = 'you need to change'
+    dataFilePath = ''
     # output file path and name for the tsv file of search results webpage
     resultPageFile = linkFilePath+'results_page_info.tsv'
     # url of search results webpage
     url = 'https://auctions.grantstreet.com/results/bond'
-    webPage = get_all_trs(url)
+    #webPage = get_all_trs(url)
     # file path and name of the fianl results
-    outputFile = linkFilePath + 'final_bonds.xls'
-    get_results_page_info(webPage, resultPageFile, dataFilePath)
+    outputFile = linkFilePath + 'task1_final_bonds.xls'
+    #get_results_page_info(webPage, resultPageFile, dataFilePath)
     writeFianlResults(resultPageFile, dataFilePath, outputFile)
 
 

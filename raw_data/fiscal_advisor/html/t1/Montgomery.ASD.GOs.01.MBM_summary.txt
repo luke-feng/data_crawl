@@ -1,0 +1,230 @@
+PFMauction: Observation:  MBM Best Bids
+Observe Auction: Montgomery.ASD.GOs.01.MBM
+MBM Best Bids
+Auction Date
+Auction Type
+Start
+End
+Last Update
+Auction Status
+Tue., Jan 16, 2001
+MBM
+11:00:00 am
+11:30:00 am
+11:47:13 am EST
+Over
+$2,500,000
+*
+Montgomery Area School District
+Lycoming County, Pennsylvania
+General Obligation Bonds
+Series of 2001
+Best MBM TIC:
+Best AON TIC:
+Best AON Bidder:
+Winner**:
+5.0454 %
+(Winner**)
+5.0995 %
+(Not Winner)
+Boenning & Scattergood Inc.
+(Not Winner)
+MBM
+Due
+Principal
+Amount
+*
+Coupon
+Purchase
+Price
+Purchase
+Yield
+MBM Winner**
+Time
+Sep 1, 2002
+$5,000
+4.000%
+98.500%
+5.033%
+Zions Bank
+11:15:18 am
+Sep 1, 2003
+$5,000
+4.000%
+98.500%
+4.636%
+Zions Bank
+11:15:18 am
+Sep 1, 2004
+$15,000
+4.000%
+98.500%
+4.464%
+Zions Bank
+11:15:18 am
+Sep 1, 2005
+$20,000
+4.100%
+98.500%
+4.470%
+Zions Bank
+11:15:18 am
+Sep 1, 2006
+$20,000
+4.125%
+98.500%
+4.434%
+Zions Bank
+11:15:18 am
+Sep 1, 2007
+$20,000
+4.150%
+98.500%
+4.417%
+Zions Bank
+11:15:18 am
+Sep 1, 2008
+$20,000
+4.200%
+98.500%
+4.436%
+Zions Bank
+11:15:18 am
+Sep 1, 2009
+$25,000
+4.250%
+98.500%
+4.463%
+Zions Bank
+11:15:18 am
+Sep 1, 2010
+$25,000
+4.300%
+98.500%
+4.495%
+Zions Bank
+11:15:18 am
+Sep 1, 2011
+$30,000
+4.350%
+98.500%
+4.531%
+Zions Bank
+11:15:18 am
+Sep 1, 2012
+$30,000
+4.450%
+98.500%
+4.619%
+Zions Bank
+11:15:18 am
+Sep 1, 2013
+$35,000
+4.550%
+98.500%
+4.710%
+Zions Bank
+11:15:18 am
+Sep 1, 2014
+$35,000
+4.650%
+98.500%
+4.802%
+Zions Bank
+11:15:18 am
+Sep 1, 2015
+$35,000
+4.750%
+98.500%
+4.895%
+Zions Bank
+11:15:18 am
+Sep 1, 2016
+$40,000
+4.800%
+98.500%
+4.939%
+Zions Bank
+11:15:18 am
+Sep 1, 2017
+$40,000
+4.850%
+98.500%
+4.984%
+Zions Bank
+11:15:18 am
+Sep 1, 2018
+$580,000
+4.900%
+99.000%
+4.986%
+Zions Bank
+11:15:18 am
+Sep 1, 2019
+$615,000
+4.950%
+99.000%
+5.034%
+Zions Bank
+11:15:18 am
+Sep 1, 2020
+$650,000
+5.000%
+99.000%
+5.081%
+Zions Bank
+11:15:18 am
+Sep 1, 2021
+$255,000
+5.050%
+99.000%
+5.129%
+Zions Bank
+11:15:18 am
+Insurer:
+FSA
+*
+Preliminary, subject to change
+**Winner - Unofficial, subject to verification and award.
+Click below to see other bidder results
+MBM bids:
+ZION-CL
+,
+Cover Bids
+,
+Bid Summary
+AON bids:
+BOEN-JM
+,
+FIRS-JD
+,
+JANN-LA
+,
+MELL-AD
+,
+Best Bid
+,
+Cover Bid
+,
+Bid Summary
+Go to:
+Notice of Sale
+,
+Amendments
+(modified 1/15/2001 @ 10:02 am)
+,
+POS
+,
+Rules
+,
+Instructions
+,
+Selections
+,
+Results
+Exit to:
+PFMauction Home Page
+For information about bond sales, call Public Financial Management at (717) 232-2723.
+Please direct questions and comments regarding bidding procedures to the
+Auction Administrator
+or call (412) 391-7686.

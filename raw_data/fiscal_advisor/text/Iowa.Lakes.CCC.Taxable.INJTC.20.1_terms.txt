@@ -1,0 +1,470 @@
+
+
+
+
+
+
+
+
+
+
+Terms: Iowa.Lakes.CCC.Taxable.INJTC.20.1
+
+
+
+				function nav_to_parent(link)
+				{
+					if (opener)
+					{
+						opener.location.href = link;
+						opener.focus();
+					}
+					else
+					{
+						window.open(link);
+					}
+					self.close();
+				}
+			
+
+
+
+
+
+
+
+
+
+
+
+
+TERMS*
+
+
+
+						[ 
+Print Page
+ ] 	
+						   
+                        
+					
+
+
+
+
+
+
+Iowa.Lakes.CCC.Taxable.INJTC.20.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Issuer
+
+
+Iowa Lakes Community College (Merged Area III)
+
+
+
+
+
+
+  State
+
+
+Iowa
+
+
+
+
+
+
+  
+												Amount
+1
+
+
+$795,000
+
+
+
+
+
+
+  Type 
+												Issue/Series  
+
+
+Taxable Industrial New Jobs Training Certificates, Series 2020-1
+
+
+
+
+
+
+  
+												Rating  
+
+
+Not Rated
+
+
+
+
+
+
+  Bank 
+												Qualified
+
+
+No
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Sale Date 
+
+
+11/17/20
+
+
+
+
+
+
+  
+												Dated Date
+
+
+12/15/20
+
+
+
+
+
+
+  Settlement 
+												Date
+2
+ 
+
+
+ 
+            12/15/20
+                                            
+
+
+
+
+
+
+  
+												Sale Time
+
+
+11:00 AM - 11:30 AM Eastern Time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+												Interest Due
+
+
+6/1, 12/1
+
+
+
+
+
+
+  Principal Due
+
+
+6/01/21 - 6/01/30
+
+
+
+
+
+
+  First Interest 
+												Date  
+
+
+6/01/21
+
+
+
+
+
+
+  Call Dates
+
+
+6/01/26 @ Par
+
+
+
+
+
+
+  Term Bonds
+
+
+Allowed
+
+
+
+
+
+
+  
+												Min. Bid Price 
+												 
+
+
+99.200%
+
+
+
+
+
+
+  Bid Details
+
+
+
+												Max. Spread: 6.000%
+
+Non-descending Coupons Required - Starting 2021 
+
+Multiple: Either 1/8th or 1/20th or 1/100th of 1%
+
+
+
+
+
+
+
+
+  Insurance
+
+
+Bidder's Option / Bidder Pays / Not Factored into TIC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Bid Format
+
+
+All-Or-None
+
+
+
+
+
+
+  Auction Format 
+
+
+Closed
+
+
+
+
+
+
+  Award Basis
+												
+
+
+TIC to Dated Date
+
+
+
+
+
+
+  Two-Minute Rule 
+												 
+
+
+No
+
+
+
+
+
+
+  Bond Counsel
+
+
+Ahlers & Cooney, P.C.,
+Des Moines, Iowa
+
+
+
+
+
+
+  Web 
+												Site
+
+
+www.SpeerAuction.com
+
+
+
+
+
+
+  Contact
+
+
+Speer Financial, Inc.
+Waterloo, IA
+Phone: 319-291-2077
+Fax: 319-291-8628
+Attn: Charlotte Nielsen
+Email: 
+cnielsen@speerfinancial.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terms as of 11/21/2020 @ 7:25 am
+
+
+1
+Preliminary, subject to change
+2
+Check offering documents or with Issuer and/or FA 
+							to ascertain if settlement is Firm or Tentative.
+						
+*
+ 
+							Disclaimer: This Term Sheet is provided by Grant 
+							Street Group for informational purposes and the 
+							convenience of bidders. Grant Street Group is not 
+							responsible for any inaccuracy in the information 
+							displayed. Bidders should carefully review the 
+							Notice of Sale and Preliminary Official Statement and decide whether 
+							to purchase Bonds solely on the basis of the information 
+							provided therein.
+	
+					
+
+
+
+
+
+
+
+						[ 
+Print Page
+ ] 
+						   
+                        
+					
+
+
+
+
+
+
+
+
+
