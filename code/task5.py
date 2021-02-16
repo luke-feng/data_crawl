@@ -131,7 +131,7 @@ def get_all_item(resultPath):
                         information = get_information(link)
                         result = [refNo, name, address, Received,
                                   Validated, Status, metaInfo, link] + information
-                        for col in range(1, len(header)+1):
+                        for col in range(1, len(result)+1):
                             sheet1.cell(line, col).value = result[col-1]
                         line += 1
                     next_url = next[0].get_attribute('href')
@@ -155,7 +155,7 @@ def get_all_item(resultPath):
                         information = get_information(link)
                         result = [refNo, name, address, Received,
                                   Validated, Status, metaInfo, link] + information
-                        for col in range(1, len(header)+1):
+                        for col in range(1, len(result)+1):
                             sheet1.cell(line, col).value = result[col-1]
                         line += 1
                     break
@@ -165,6 +165,7 @@ def get_all_item(resultPath):
     print('get webpage finish!')
 
 def get_information(url):
+    print(url)
     summary = []
     details = []
     contacts = []
@@ -189,14 +190,15 @@ def get_summary(url):
     browser = webdriver.Chrome(
         executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
-    simpleDetailsTable = browser.find_element_by_id('simpleDetailsTable')
-    trs = simpleDetailsTable.find_elements_by_css_selector('tbody>tr')
-    for tr in trs:
-        content = tr.find_element_by_css_selector('td').text
-        key = tr.find_element_by_css_selector('th').text
-        if key not in summarykey:
-            summarykey.append(key)
-        summary.append(content)
+    simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
+    if len(simpleDetailsTable)>0:
+        trs = simpleDetailsTable[0].find_elements_by_css_selector('tbody>tr')
+        for tr in trs:
+            content = tr.find_element_by_css_selector('td').text
+            key = tr.find_element_by_css_selector('th').text
+            if key not in summarykey:
+                summarykey.append(key)
+            summary.append(content)
     browser.close()
     return summary
 
@@ -208,14 +210,15 @@ def get_details(url):
     browser = webdriver.Chrome(
         executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
-    simpleDetailsTable = browser.find_element_by_id('applicationDetails')
-    trs = simpleDetailsTable.find_elements_by_css_selector('tbody>tr')
-    for tr in trs:
-        content = tr.find_element_by_css_selector('td').text
-        key = tr.find_element_by_css_selector('th').text
-        if key not in detailskey:
-            detailskey.append(key)
-        details.append(content)
+    simpleDetailsTable = browser.find_elements_by_id('applicationDetails')
+    if len(simpleDetailsTable)>0:
+        trs = simpleDetailsTable[0].find_elements_by_css_selector('tbody>tr')
+        for tr in trs:
+            content = tr.find_element_by_css_selector('td').text
+            key = tr.find_element_by_css_selector('th').text
+            if key not in detailskey:
+                detailskey.append(key)
+            details.append(content)
     browser.close()
     return details
 
@@ -241,14 +244,15 @@ def get_dates(url):
     browser = webdriver.Chrome(
         executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
-    simpleDetailsTable = browser.find_element_by_id('simpleDetailsTable')
-    trs = simpleDetailsTable.find_elements_by_css_selector('tbody>tr')
-    for tr in trs:
-        content = tr.find_element_by_css_selector('td').text
-        key = tr.find_element_by_css_selector('th').text
-        if key not in dateskey:
-            dateskey.append(key)
-        dates.append(content)
+    simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
+    if len(simpleDetailsTable)>0:
+        trs = simpleDetailsTable[0].find_elements_by_css_selector('tbody>tr')
+        for tr in trs:
+            content = tr.find_element_by_css_selector('td').text
+            key = tr.find_element_by_css_selector('th').text
+            if key not in dateskey:
+                dateskey.append(key)
+            dates.append(content)
     browser.close()
     return dates
 
