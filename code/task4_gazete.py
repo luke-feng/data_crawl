@@ -26,19 +26,19 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def get_all_article(upper, resultPath):
-    """
+    '''
     get web source code from the results webpage
     :param url: the results webpage
     :return page: string data type, page source code
-    """
+    '''
 
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(
-        executable_path="C:/Program Files/Google/Chrome/Application/chromedriver.exe", options=chrome_options)
+        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     url = 'https://www.thegazette.co.uk/insolvency/notice?text=&insolvency_corporate=G205010000&insolvency_personal\
         =G206030000&location-postcode-1=&location-distance-1=1&location-local-authority-1=&numberOfLocationSearches=1&\
-        start-publish-date=&end-publish-date=&edition=&london-issue=&edinburgh-issue=&belfast-issue=&sort-by=&results-page-size=10&results-page='
+        start-publish-date=&end-publish-date=&edition=&london-issue=&edinburgh-issue=&belfast-issue=&sort-by=&results-page-size=100&results-page='
 
     outputFile = resultPath
     xlsFile = openpyxl.Workbook()
@@ -53,9 +53,15 @@ def get_all_article(upper, resultPath):
     for i in range(1, upper+1):
         url = url + str(i)
         browser.get(url)
-        article = browser.find_elements_by_css_selector("body>.wrapper>.wrapperContent>\
+        Wait(browser, 600).until(
+            Expect.presence_of_element_located(
+                (By.CSS_SELECTOR, 'body>.wrapper>.wrapperContent>\
                 .main-group.no-hero>#main_content>.services-content>\
-                #searchform>.main-pane>section>#search-results>.content>article")
+                #searchform>.main-pane>section>#search-results>.content>article'))
+        )
+        article = browser.find_elements_by_css_selector('body>.wrapper>.wrapperContent>\
+                .main-group.no-hero>#main_content>.services-content>\
+                #searchform>.main-pane>section>#search-results>.content>article')
         # get web source code
         if len(article) > 1:
             for tr in article:
@@ -94,8 +100,12 @@ def get_information(url):
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(
-        executable_path="C:/Program Files/Google/Chrome/Application/chromedriver.exe", options=chrome_options)
+        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
+    Wait(browser, 600).until(
+        Expect.presence_of_element_located(
+            (By.CSS_SELECTOR, 'body>.wrapper>.wrapperContent>.main-group.no-hero>#main_content>.services-content'))
+    )
     information = browser.find_element_by_css_selector(
         'body>.wrapper>.wrapperContent>.main-group.no-hero>#main_content>.services-content')
     results = []
@@ -189,9 +199,9 @@ def get_notice_timeline(information):
 
             line = 'Item title: {}, Item ID: {}, Link: {}, Datetime: {}'.format(
                 item_title, item_id, item_link, item_datatime)
-            results += line+'\n'
+            timeline += line+'\n'
         #print('{} {} {} {}'.format(timeline_title, meeting, resolution, appointment))
-        results = [timeline_title,timeline]
+        results = [timeline_title, timeline]
         return results
 
     else:
