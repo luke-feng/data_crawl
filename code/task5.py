@@ -33,6 +33,8 @@ def get_all_item(resultPath):
     chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(
         executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+    browser1 = webdriver.Chrome(
+        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     url = 'https://www1.somersetwestandtaunton.gov.uk/online-applications/search.do?action=advanced'
     startday = ['01/01', '01/02', '01/03', '01/04', '01/05', '01/06',
                 '01/07', '01/08', '01/09', '01/10', '01/11', '01/12']
@@ -82,6 +84,7 @@ def get_all_item(resultPath):
     for col in range(1, len(header)+1):
         sheet1.cell(1, col).value = header[col-1]
     line = 2
+    
     for year in range(2000, 2001):
         for mon in range(0, 12):
             qstart = startday[mon]+'/'+str(year)
@@ -113,9 +116,10 @@ def get_all_item(resultPath):
 
             while True:
                 next = browser.find_elements_by_class_name('next')
-                print(len(searchResults))
                 if len(next) > 0:
+                    par = tqdm.tqdm( total=len(searchResults), ncols=100)
                     for result in searchResults:
+                        par.update(1)
                         link = result.find_element_by_css_selector(
                             'a').get_attribute('href')
                         name = result.find_element_by_css_selector('a').text
@@ -128,18 +132,21 @@ def get_all_item(resultPath):
                         Received = ml[1].split(':')[1]
                         Validated = ml[2].split(':')[1]
                         Status = ml[3].split(':')[1]
-                        information = get_information(link)
+                        information = get_information(browser1, link)
                         result = [refNo, name, address, Received,
                                   Validated, Status, metaInfo, link] + information
                         for col in range(1, len(result)+1):
                             sheet1.cell(line, col).value = result[col-1]
                         line += 1
+                    par.close()
                     next_url = next[0].get_attribute('href')
                     browser.get(next_url)
                     searchResults = browser.find_elements_by_class_name(
                         'searchresult')
                 else:
+                    par = tqdm.tqdm( total=len(searchResults), ncols=100)
                     for result in searchResults:
+                        par.update(1)
                         link = result.find_element_by_css_selector(
                             'a').get_attribute('href')
                         name = result.find_element_by_css_selector('a').text
@@ -152,19 +159,21 @@ def get_all_item(resultPath):
                         Received = ml[1].split(':')[1]
                         Validated = ml[2].split(':')[1]
                         Status = ml[3].split(':')[1]
-                        information = get_information(link)
+                        information = get_information(browser1, link)
                         result = [refNo, name, address, Received,
                                   Validated, Status, metaInfo, link] + information
                         for col in range(1, len(result)+1):
                             sheet1.cell(line, col).value = result[col-1]
                         line += 1
+                    par.close()
                     break
     xlsFile.save(outputFile)
     print('total page is {}'.format(str(line-1)))
     browser.close()
+    browser1.close()
     print('get webpage finish!')
 
-def get_information(url):
+def get_information(browser, url):
     print(url)
     summary = []
     details = []
@@ -175,20 +184,16 @@ def get_information(url):
     detailslink = url.replace('activeTab=summary', 'activeTab=details')
     contactslink = url.replace('activeTab=summary', 'activeTab=contacts')
     dateslink = url.replace('activeTab=summary', 'activeTab=dates')
-    summary = get_summary(summarylink)
-    details = get_details(detailslink)
-    contacts = get_contacts(contactslink)
-    dates = get_dates(dateslink)
+    summary = get_summary(browser,summarylink)
+    details = get_details(browser,detailslink)
+    contacts = get_contacts(browser,contactslink)
+    dates = get_dates(browser,dateslink)
     results = summary + details + contacts + dates
     return results
 
 
-def get_summary(url):
+def get_summary(browser, url):
     summary = []
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    browser = webdriver.Chrome(
-        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
     simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
     if len(simpleDetailsTable)>0:
@@ -199,16 +204,11 @@ def get_summary(url):
             if key not in summarykey:
                 summarykey.append(key)
             summary.append(content)
-    browser.close()
     return summary
 
 
-def get_details(url):
+def get_details(browser,url):
     details = []
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    browser = webdriver.Chrome(
-        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
     simpleDetailsTable = browser.find_elements_by_id('applicationDetails')
     if len(simpleDetailsTable)>0:
@@ -219,30 +219,20 @@ def get_details(url):
             if key not in detailskey:
                 detailskey.append(key)
             details.append(content)
-    browser.close()
     return details
 
 
-def get_contacts(url):
+def get_contacts(browser,url):
     contacts = []
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    browser = webdriver.Chrome(
-        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
     simpleDetailsTable = browser.find_element_by_class_name('tabcontainer')
     lines = simpleDetailsTable.text
     contacts = [lines]
-    browser.close()
     return contacts
 
 
-def get_dates(url):
+def get_dates(browser,url):
     dates = []
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    browser = webdriver.Chrome(
-        executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
     browser.get(url)
     simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
     if len(simpleDetailsTable)>0:
@@ -253,7 +243,6 @@ def get_dates(url):
             if key not in dateskey:
                 dateskey.append(key)
             dates.append(content)
-    browser.close()
     return dates
 
 
