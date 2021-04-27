@@ -32,32 +32,33 @@ class Task5:
         self.resultPath = resultPath
         chrome_options = Options()
         chrome_options.add_argument('--headless')
-
+        # Change your chrome path here
+        chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
         self.executor = ThreadPoolExecutor(max_workers=10)
         # for main thread
         self.driver = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         # for workers
         self.driver1 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver2 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver3 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver4 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver5 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver6 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver7 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver8 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver9 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.driver10 = webdriver.Chrome(
-            executable_path='C:/Program Files/Google/Chrome/Application/chromedriver.exe', options=chrome_options)
+            executable_path=chrome_path, options=chrome_options)
         self.workers = [self.driver1, self.driver2,
                         self.driver3, self.driver4, self.driver5,self.driver6, self.driver7,
                         self.driver8, self.driver9, self.driver10]
@@ -99,7 +100,7 @@ class Task5:
             sheet1.cell(1, col).value = header[col-1]
         line = 2
 
-        for year in range(2000, 2020):
+        for year in range(2000, 2021):
             for mon in range(0, 12):
                 qstart = startday[mon]+'/'+str(year)
                 qend = endday[mon]+'/'+str(year)
@@ -146,7 +147,7 @@ class Task5:
                                 end.append(i+10)
                         for i, s in enumerate(start):
                             self.asyn_page(
-                                url_list=searchResult[start[i], end[i]])
+                                url_list=searchResult[start[i]: end[i]])
                             par.update(10)
                         par.close()
                         next_url = next[0].get_attribute('href')
@@ -441,7 +442,8 @@ class Task5:
 
 
 if __name__ == '__main__':
+    # chage the data path here
     datapath = 'D:/git/data_crawl/raw_data/gazette/'
-    infoPageName = datapath + 'result1.xlsx'
+    infoPageName = datapath + 'task5.xlsx'
     task = Task5(infoPageName)
     task.run()

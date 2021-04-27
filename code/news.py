@@ -14,13 +14,15 @@ import logging
 import datetime
 import requests
 import urllib3
+import openpyxl
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 source_path = 'D:/git/data_crawl/raw_data/'
-newslink_path = 'D:/git/data_crawl/raw_data/t.csv'
-
+newslink_path = 'D:/git/data_crawl/raw_data/newslink.csv'
+resultPath = source_path + 'news.json'
 xl = pd.read_csv(newslink_path, index_col=None, header=None)
 urls = xl[0].values.tolist()
-resultPath = source_path + 'news.json'
+
 
 def fetch_urls(urls, timeout=None):
     """
@@ -91,42 +93,88 @@ def get_content_length(content):
         content_length = len(clist)
         return content_length
 
-
-with open(resultPath, 'w') as outfile:
-    start = []
-    end = []
-    for i in range(0, len(urls), 10):
-        start.append(i)
-        if i + 10 >= len(urls):
-            end.append(len(urls))
-        else:
-            end.append(i+10)
-    par = tqdm.tqdm(ncols=100, total=len(urls))
-    for i, s in enumerate(start):
-        results = []
-        try:
-            url_list=urls[start[i]: end[i]]
-            results = from_urls(url_list, timeout=5)
-        except Exception as exc:
-            pass
-        for url in url_list:
-            content = new_content(url)
-            if url in results:
-                if results[url]!= None and 'www.sec.gov' not in url:
-                    content["date_publish"] = str(results[url].date_publish)
-                    content["language"] = results[url].language
-                    content["source_domain"] = results[url].source_domain
-                    content["maintext"] = results[url].maintext
-                    content["title_NP"] = results[url].title
-                    if content["maintext"] !=None:
-                        content["content_length"] = get_content_length(content["maintext"])
-            json.dump(content, outfile, indent=4, sort_keys=True)
-        par.update(10)
-    outfile.close()
-print('get webpage finish!')
+def crawler():
+    with open(resultPath, 'w') as outfile:
+        start = []
+        end = []
+        for i in range(0, len(urls), 10):
+            start.append(i)
+            if i + 10 >= len(urls):
+                end.append(len(urls))
+            else:
+                end.append(i+10)
+        par = tqdm.tqdm(ncols=100, total=len(urls))
+        for i, s in enumerate(start):
+            results = []
+            try:
+                url_list=urls[start[i]: end[i]]
+                results = from_urls(url_list, timeout=5)
+            except Exception as exc:
+                pass
+            for url in url_list:
+                content = new_content(url)
+                if url in results:
+                    if results[url]!= None and 'www.sec.gov' not in url:
+                        content["date_publish"] = str(results[url].date_publish)
+                        content["language"] = results[url].language
+                        content["source_domain"] = results[url].source_domain
+                        content["maintext"] = results[url].maintext
+                        content["title_NP"] = results[url].title
+                        if content["maintext"] !=None:
+                            content["content_length"] = get_content_length(content["maintext"])
+                json.dump(content, outfile, indent=4, sort_keys=True)
+            par.update(10)
+        outfile.close()
+    print('get webpage finish!')
 
 def get_content_length(content):
         content_length = 0
         clist = content.split()
         content_length = len(clist)
         return content_length
+
+jsonPath = source_path + 'news.json'
+excelPath = source_path + 'news.xlsx'
+
+def from_json_to_excel(jsonPath, excelPath):
+    xlsFile = openpyxl.Workbook()
+    sheet1 = xlsFile.create_sheet(index=0)
+    header = ['url', 'language', 'title', 'date_publish' 'maintext', 'content_length', 'source_domain']
+
+    for i in range(1, len(header)+1):
+        sheet1.cell(1, i).value = header[i-1]
+    with open(jsonPath, 'r')as old:
+        url = ''
+        language = ''
+        title = ''
+        date_publish = ''
+        maintext = ''
+        content_length = ''
+        source_domain = ''
+        index = 1
+        cl = ''
+        jl = ''
+        par = tqdm.tqdm(ncols=100, total=len(urls))
+        for l in old:
+            if '}{' in l:
+                par.update(1)
+                cl += '}'
+                jl = json.loads(cl)
+                url = jl['url']
+                language = jl['language']
+                title = jl['title_NP']
+                date_publish = jl['date_publish']
+                maintext =jl['maintext']
+                content_length =jl['content_length']
+                source_domain =jl['source_domain']
+                index +=1
+                line = [url, language, title, date_publish, maintext, content_length, source_domain]
+                for i in range(1, len(line)+1):
+                    sheet1.cell(index, i).value = line[i-1]
+                cl = '{'
+            else:
+                cl += l
+        xlsFile.save(excelPath)
+
+#crawler()
+from_json_to_excel(jsonPath, excelPath)
