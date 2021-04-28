@@ -15,27 +15,27 @@ import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 import requests
 
-url = 'http://dps.kdlapi.com/api/getdps/?orderid=911955699122279&num=2&pt=1&format=json&sep=1'
-resp = requests.get(url)
-json_data = resp.json()
-proxylist = json_data['data']['proxy_list']
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--log-level=1')
+# url = 'http://dps.kdlapi.com/api/getdps/?orderid=911955699122279&num=2&pt=1&format=json&sep=1'
+# resp = requests.get(url)
+# json_data = resp.json()
+# proxylist = json_data['data']['proxy_list']
+# chrome_options = Options()
+# chrome_options.add_argument('--headless')
+# chrome_options.add_argument('--log-level=1')
 
-for PROXY in proxylist:
-    try:
-        chrome_options.add_argument('--proxy-server={0}'.format(PROXY))
-        chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
-        driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
-        driver.set_page_load_timeout(5)
-        driver.get('https://www.baidu.com')
-        id = driver.find_element_by_class_name('title-content-title').text
-        print(id)
-        print(PROXY)
-    except Exception as exc:
-        print(exc)
-        continue
+# for PROXY in proxylist:
+#     try:
+#         chrome_options.add_argument('--proxy-server={0}'.format(PROXY))
+#         chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
+#         driver = webdriver.Chrome(executable_path=chrome_path, options=chrome_options)
+#         driver.set_page_load_timeout(5)
+#         driver.get('https://www.baidu.com')
+#         id = driver.find_element_by_class_name('title-content-title').text
+#         print(id)
+#         print(PROXY)
+#     except Exception as exc:
+#         print(exc)
+#         continue
     
     
 
