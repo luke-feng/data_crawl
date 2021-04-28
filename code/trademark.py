@@ -23,19 +23,16 @@ import sys
 import urllib.request
 import openpyxl
 import pandas as pd
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import concurrent.futures
 from random import randint
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 # !change the Trademark_ID_List.xlsx file path here
-id_path = '.../Trademark_ID_List.xlsx'
+id_path = 'D:/git/data_crawl/raw_data/Trademark_ID_List.xlsx'
 # !change the chromedriver file path here
-chrome_path = '.../chromedriver.exe'
+chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
 # !change the output file path here
-outputFile = '.../final_Trademark.xlsx'
+outputFile = 'D:/git/data_crawl/raw_data/final_Trademark.xlsx'
 
 
 
@@ -45,6 +42,13 @@ def read_all_ids(id_path):
     ids = xl[0].values.tolist()
     return ids
 
+def get_proxyList():
+    url = 'http://dps.kdlapi.com/api/getdps/?orderid=911955699122279&num=2&pt=1&format=json&sep=1'
+    resp = requests.get(url)
+    json_data = resp.json()
+    proxylist = json_data['data']['proxy_list']
+    return proxylist
+
 
 def generate_resultsUrlList(ids):
     resultsUrlList = [
@@ -52,43 +56,55 @@ def generate_resultsUrlList(ids):
     return resultsUrlList
 
 
-def get_tabs(url):
-    sleeptime = randint(20, 30)
-    time.sleep(sleeptime)
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--log-level=0')
-    driver = webdriver.Chrome(
-        executable_path=chrome_path, options=chrome_options)
-    tabContents = []
-    driver.get(url)
-    time.sleep(1)
-    webPage = driver.page_source
-    print('1' + driver.current_url)
-    soup = BeautifulSoup(webPage, 'lxml')
-    tabs = soup.select(
-        'body>main>.tab-container.ui-tabs.ui-corner-all.ui-widget.ui-widget-content>div')
-    print(len(tabs))
-    resultContent = get_results(tabs)
-    time.sleep(10)
-    historyEle = driver.find_element_by_xpath(
-        '/html/body/main/div[4]/div/p[1]/a')
-    if historyEle is not None:
-        historyUrl = historyEle.get_attribute('href')
-        driver.get(historyUrl)
-        print('2' + driver.current_url)
-        webPage = driver.page_source
-        soup = BeautifulSoup(webPage, 'lxml')
-        tabs = soup.select(
-            'body>main>.tab-container.ui-tabs.ui-corner-all.ui-widget.ui-widget-content>div')
-        print(len(tabs))
-        historyContent = get_history(tabs)
-    time.sleep(10)
-    driver.delete_all_cookies()
-    driver.quit()
-    tabContents = resultContent + historyContent
-    return tabContents
-
+def get_tabs(url, proxylist):
+    for PROXY in proxylist:
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--proxy-server={}'.format(PROXY))
+            driver = webdriver.Chrome(
+                executable_path=chrome_path, options=chrome_options)
+            tabContents = []
+            driver.get(url)
+            webPage = driver.page_source
+            noSuchId = driver.find_elements_by_xpath('/html/body/main/form/div[3]/button')
+            if len(noSuchId) > 0:
+                return 'Search for a trade mark'
+            print('1' + driver.current_url)
+            soup = BeautifulSoup(webPage, 'lxml')
+            tabs = soup.select(
+                'body>main>.tab-container.ui-tabs.ui-corner-all.ui-widget.ui-widget-content>div')
+            print(len(tabs))
+            if len(tabs) == 0:
+                driver.delete_all_cookies()
+                driver.quit()
+                continue
+            resultContent = get_results(tabs)
+            historyEle = driver.find_element_by_xpath(
+                '/html/body/main/div[4]/div/p[1]/a')
+            if historyEle is not None:
+                historyUrl = historyEle.get_attribute('href')
+                driver.get(historyUrl)
+                print('2' + driver.current_url)
+                webPage = driver.page_source
+                soup = BeautifulSoup(webPage, 'lxml')
+                tabs = soup.select(
+                    'body>main>.tab-container.ui-tabs.ui-corner-all.ui-widget.ui-widget-content>div')
+                print(len(tabs))
+                if len(tabs) == 0:
+                    driver.delete_all_cookies()
+                    driver.quit()
+                    continue
+                historyContent = get_history(tabs)
+            driver.delete_all_cookies()
+            driver.quit()
+            tabContents = resultContent + historyContent
+            return tabContents
+        except Exception as e:
+            print(e)
+            driver.delete_all_cookies()
+            driver.quit()
+            continue
 
 
 def get_results(tabs):
@@ -235,14 +251,27 @@ def write_results():
     results = dict()
     ids = read_all_ids(id_path)
     resultsUrlList = generate_resultsUrlList(ids)
-
+    proxylist = get_proxyList()
+    start = time.time()
+    n = 0
     for i in range(0, len(resultsUrlList)):
         resultsUrl = resultsUrlList[i]
         urlId = ids[i]
-        resultsTabContents = get_tabs(resultsUrl)
+        middle = time.time()
+        if middle - start > 120:
+            proxylist = get_proxyList()
+            start = time.time()
+        resultsTabContents = get_tabs(resultsUrl, proxylist)
+        if type(resultsTabContents) == str:
+            print('Invalid ID: {}'.format(urlId))
+            n += 1
+            continue
+        elif resultsTabContents == None:
+            proxylist = get_proxyList()
+            resultsTabContents = get_tabs(resultsUrl, proxylist)
         results[urlId] = [urlId] + resultsTabContents
         for j in range(1, len(header)+1):
-            sheet1.cell(i+2, j).value = results[urlId][j-1]
+            sheet1.cell(i+2-n, j).value = results[urlId][j-1]
         xlsFile.save(outputFile)
     return results
 
