@@ -65,7 +65,7 @@ class Task5:
 
     def run(self):
 
-        url = 'https://www1.somersetwestandtaunton.gov.uk/online-applications/search.do?action=advanced'
+        url = 'https://www.planning2.cityoflondon.gov.uk/online-applications/search.do?action=advanced'
         startday = ['01/01', '01/02', '01/03', '01/04', '01/05', '01/06',
                     '01/07', '01/08', '01/09', '01/10', '01/11', '01/12']
         endday = ['01/02', '01/03', '01/04', '01/05', '01/06', '01/07',
@@ -90,7 +90,7 @@ class Task5:
                   'Latest Site Notice Expiry Date', 'Statutory Expiry Date',
                   'Agreed Expiry Date', 'Decision Made Date', 'Decision Issued Date',
                   'Permission Expiry Date', 'Decision Printed Date',
-                  'Environmental Impact Assessment Received', 'Temporary Permission Expiry Date'
+                  'Environmental Impact Assessment Received', 'Temporary Permission Expiry Date', 'Internal Target Date'
                   ]
 
         outputFile = self.resultPath
@@ -106,9 +106,9 @@ class Task5:
                 qend = endday[mon]+'/'+str(year)
                 print(qstart, qend)
                 self.driver.get(url)
-                Wait(self.driver, 600).until(
+                Wait(self.driver, 6).until(
                     Expect.presence_of_element_located(
-                        (By.CSS_SELECTOR, 'body>#idox>#pa>.container>.content>.tabcontainer>#advancedSearchForm>#dates>fieldset>.row>.col-dateFrom'))
+                        (By.XPATH, '/html/body/div/div/div[2]/div/div[3]/div[2]/form/div[4]/input[2]'))
                 )
                 fromdate = self.driver.find_element_by_id(
                     'applicationReceivedStart')
@@ -116,10 +116,10 @@ class Task5:
                 enddate = self.driver.find_element_by_id(
                     'applicationReceivedEnd')
                 enddate.send_keys(qend)
-                self.driver.find_element_by_css_selector(
-                    'body>#idox>#pa>.container>.content>.tabcontainer>#advancedSearchForm>.buttons>.button.primary').click()
+                self.driver.find_element_by_xpath(
+                    '/html/body/div/div/div[2]/div/div[3]/div[2]/form/div[4]/input[2]').click()
                 self.driver.get(self.driver.current_url)
-                Wait(self.driver, 600).until(
+                Wait(self.driver, 6).until(
                     Expect.presence_of_element_located(
                         (By.ID, 'resultsPerPage'))
                 )
@@ -127,8 +127,7 @@ class Task5:
                     'resultsPerPage')
                 s1 = Select(resultsPerPage)
                 s1.select_by_value('100')
-                self.driver.find_element_by_css_selector(
-                    'body>#idox>#pa>.container>.content>#searchfilters>#searchResults>.button.primary').click()
+                self.driver.find_element_by_css_selector('#searchResults > input.button.primary').click()
                 # browser.get(browser.current_url)
                 searchResults = self.driver.find_elements_by_class_name(
                     'searchresult')
@@ -147,7 +146,7 @@ class Task5:
                                 end.append(i+10)
                         for i, s in enumerate(start):
                             self.asyn_page(
-                                url_list=searchResult[start[i]: end[i]])
+                                url_list=searchResults[start[i]: end[i]])
                             par.update(10)
                         par.close()
                         next_url = next[0].get_attribute('href')
@@ -370,6 +369,7 @@ class Task5:
         Decision_Printed_Date = ''
         Environmental_Impact_Assessment_Received = ''
         Temporary_Permission_Expiry_Date = ''
+        Internal_Target_Date = ''
 
         simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
         if len(simpleDetailsTable) > 0:
@@ -418,12 +418,14 @@ class Task5:
                     Environmental_Impact_Assessment_Received = content
                 elif key == 'Temporary Permission Expiry Date':
                     Temporary_Permission_Expiry_Date = content
+                elif key == 'Internal Target Date':
+                    Internal_Target_Date = content
             dates = [Application_Received_Date, Application_Validated_Date, Expiry_Date, Actual_Committee_Date,
                      Latest_Neighbour_Consultation_Date, Neighbour_Consultation_Expiry_Date, Standard_Consultation_Date,
                      Standard_Consultation_Expiry_Date, Last_Advertised_In_Press_Date, Latest_Advertisement_Expiry_Date,
                      Last_Site_Notice_Posted_Date, Latest_Site_Notice_Expiry_Date, Statutory_Expiry_Date,
                      Agreed_Expiry_Date, Decision_Made_Date, Decision_Issued_Date, Permission_Expiry_Date,
-                     Decision_Printed_Date, Environmental_Impact_Assessment_Received, Temporary_Permission_Expiry_Date]
+                     Decision_Printed_Date, Environmental_Impact_Assessment_Received, Temporary_Permission_Expiry_Date, Internal_Target_Date]
         return dates
 
     def asyn_page(self, url_list):
@@ -444,6 +446,6 @@ class Task5:
 if __name__ == '__main__':
     # chage the data path here
     datapath = 'D:/git/data_crawl/raw_data/gazette/'
-    infoPageName = datapath + 'task5.xlsx'
+    infoPageName = datapath + 'City_of_London.xlsx'
     task = Task5(infoPageName)
     task.run()
