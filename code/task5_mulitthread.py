@@ -24,11 +24,12 @@ import urllib.request
 import openpyxl
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
-finalResult = []
+
 
 
 class Task5:
     def __init__(self, resultPath):
+        self.finalResult = []
         self.resultPath = resultPath
         chrome_options = Options()
         chrome_options.add_argument('--headless')
@@ -63,15 +64,13 @@ class Task5:
                         self.driver3, self.driver4, self.driver5,self.driver6, self.driver7,
                         self.driver8, self.driver9, self.driver10]
 
-    def run(self):
-
-        url = 'https://www.planning2.cityoflondon.gov.uk/online-applications/search.do?action=advanced'
+    def run(self, url, council):
         startday = ['01/01', '01/02', '01/03', '01/04', '01/05', '01/06',
                     '01/07', '01/08', '01/09', '01/10', '01/11', '01/12']
         endday = ['01/02', '01/03', '01/04', '01/05', '01/06', '01/07',
                   '01/08', '01/09', '01/10', '01/11', '01/12', '31/12']
 
-        header = ['Ref. No', 'Name', 'Address', 'Received',
+        header = ['Council', 'Ref. No', 'Name', 'Address', 'Received',
                   'Validated', 'Status', 'MetaInfo', 'Link',
                   'Reference', 'Alternative Reference', 'Application Received',
                   'Application Validated', 'Address', 'Proposal', 'Status',
@@ -90,7 +89,7 @@ class Task5:
                   'Latest Site Notice Expiry Date', 'Statutory Expiry Date',
                   'Agreed Expiry Date', 'Decision Made Date', 'Decision Issued Date',
                   'Permission Expiry Date', 'Decision Printed Date',
-                  'Environmental Impact Assessment Received', 'Temporary Permission Expiry Date', 'Internal Target Date'
+                  'Environmental Impact Assessment Received', 'Temporary Permission Expiry Date', 'Internal Target Date', 'Determination Deadline', 'Target Date'
                   ]
 
         outputFile = self.resultPath
@@ -100,15 +99,15 @@ class Task5:
             sheet1.cell(1, col).value = header[col-1]
         line = 2
 
-        for year in range(2000, 2021):
-            for mon in range(0, 12):
+        for year in range(2000, 2001):
+            for mon in range(0, 1):
                 qstart = startday[mon]+'/'+str(year)
                 qend = endday[mon]+'/'+str(year)
                 print(qstart, qend)
                 self.driver.get(url)
-                Wait(self.driver, 6).until(
+                Wait(self.driver, 10).until(
                     Expect.presence_of_element_located(
-                        (By.XPATH, '/html/body/div/div/div[2]/div/div[3]/div[2]/form/div[4]/input[2]'))
+                        (By.CSS_SELECTOR, '#advancedSearchForm > div.buttons > input.button.primary'))
                 )
                 fromdate = self.driver.find_element_by_id(
                     'applicationReceivedStart')
@@ -116,13 +115,16 @@ class Task5:
                 enddate = self.driver.find_element_by_id(
                     'applicationReceivedEnd')
                 enddate.send_keys(qend)
-                self.driver.find_element_by_xpath(
-                    '/html/body/div/div/div[2]/div/div[3]/div[2]/form/div[4]/input[2]').click()
+                self.driver.find_element_by_css_selector(
+                    '#advancedSearchForm > div.buttons > input.button.primary').click()
                 self.driver.get(self.driver.current_url)
-                Wait(self.driver, 6).until(
-                    Expect.presence_of_element_located(
-                        (By.ID, 'resultsPerPage'))
-                )
+                # try:
+                #     Wait(self.driver, 10).until(
+                #         Expect.presence_of_element_located(
+                #             (By.ID, 'resultsPerPage'))
+                #     )
+                # except Exception as exc:
+                #     print(qstart, qend, exc)
                 resultsPerPage = self.driver.find_element_by_id(
                     'resultsPerPage')
                 s1 = Select(resultsPerPage)
@@ -146,7 +148,7 @@ class Task5:
                                 end.append(i+10)
                         for i, s in enumerate(start):
                             self.asyn_page(
-                                url_list=searchResults[start[i]: end[i]])
+                                url_list=searchResults[start[i]: end[i]], council=council)
                             par.update(10)
                         par.close()
                         next_url = next[0].get_attribute('href')
@@ -165,15 +167,15 @@ class Task5:
                                 end.append(i+10)
                         for i, s in enumerate(start):
                             self.asyn_page(
-                                url_list=searchResults[start[i]:end[i]])
+                                url_list=searchResults[start[i]:end[i]], council=council)
                             par.update(10)
                         par.close()
                         break
-        for i, line in enumerate(finalResult):
+        for i, line in enumerate(self.finalResult):
             for col in range(1, len(line)+1):
                 sheet1.cell(i+2, col).value = line[col-1]
         xlsFile.save(outputFile)
-        print('total page is {}'.format(len(finalResult)))
+        print('total page is {}'.format(len(self.finalResult)))
         print('get webpage finish!')
 
     def __del__(self):
@@ -190,7 +192,7 @@ class Task5:
         self.driver10.close()
         print('>>>>[Well Done]')
 
-    def get_information(self, browser, result):
+    def get_information(self, browser, result, council):
         link = result.find_element_by_css_selector(
             'a').get_attribute('href')
         name = result.find_element_by_css_selector(
@@ -200,10 +202,19 @@ class Task5:
         metaInfo = result.find_element_by_css_selector(
             '.metaInfo').text
         ml = metaInfo.split('|')
-        refNo = ml[0].split(':')[1]
-        Received = ml[1].split(':')[1]
-        Validated = ml[2].split(':')[1]
-        Status = ml[3].split(':')[1]
+        refNo = ''
+        Received= ''
+        Validated= ''
+        Status= ''
+        for meta in ml:
+            if 'Ref.' in meta:
+                refNo = meta.split(':')[1]
+            elif 'Received:' in meta:
+                Received = meta.split(':')[1]
+            elif 'Validated:' in meta:
+                Validated = meta.split(':')[1]
+            elif 'Status:' in meta:
+                Status = meta.split(':')[1]
         summary = []
         details = []
         contacts = []
@@ -217,7 +228,7 @@ class Task5:
         details = self.get_details(browser, detailslink)
         contacts = self.get_contacts(browser, contactslink)
         dates = self.get_dates(browser, dateslink)
-        res = [refNo, name, address, Received,
+        res = [council,refNo, name, address, Received,
                Validated, Status, metaInfo, link] + summary + details + contacts + dates
         return res
 
@@ -370,6 +381,8 @@ class Task5:
         Environmental_Impact_Assessment_Received = ''
         Temporary_Permission_Expiry_Date = ''
         Internal_Target_Date = ''
+        Determination_Deadline = ''
+        Target_Date = ''
 
         simpleDetailsTable = browser.find_elements_by_id('simpleDetailsTable')
         if len(simpleDetailsTable) > 0:
@@ -420,25 +433,29 @@ class Task5:
                     Temporary_Permission_Expiry_Date = content
                 elif key == 'Internal Target Date':
                     Internal_Target_Date = content
+                elif key == 'Determination Deadline':
+                    Determination_Deadline = content
+                elif key == 'Target Date':
+                    Target_Date = content
             dates = [Application_Received_Date, Application_Validated_Date, Expiry_Date, Actual_Committee_Date,
                      Latest_Neighbour_Consultation_Date, Neighbour_Consultation_Expiry_Date, Standard_Consultation_Date,
                      Standard_Consultation_Expiry_Date, Last_Advertised_In_Press_Date, Latest_Advertisement_Expiry_Date,
                      Last_Site_Notice_Posted_Date, Latest_Site_Notice_Expiry_Date, Statutory_Expiry_Date,
                      Agreed_Expiry_Date, Decision_Made_Date, Decision_Issued_Date, Permission_Expiry_Date,
-                     Decision_Printed_Date, Environmental_Impact_Assessment_Received, Temporary_Permission_Expiry_Date, Internal_Target_Date]
+                     Decision_Printed_Date, Environmental_Impact_Assessment_Received, Temporary_Permission_Expiry_Date, Internal_Target_Date, Determination_Deadline, Target_Date]
         return dates
 
-    def asyn_page(self, url_list):
+    def asyn_page(self, url_list, council):
         future_to_url  = dict()
         for i, url in enumerate(url_list):
             t = self.executor.submit(self.get_information,
-                                 browser=self.workers[i], result=url_list[i])
+                                 browser=self.workers[i], result=url_list[i], council = council)
             future_to_url[t] = url               
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
                 data = future.result()
-                finalResult.append(data)
+                self.finalResult.append(data)
             except Exception as exc:
                 print('%r generated an exception: %s' % (url, exc))
 
@@ -446,6 +463,38 @@ class Task5:
 if __name__ == '__main__':
     # chage the data path here
     datapath = 'D:/git/data_crawl/raw_data/gazette/'
-    infoPageName = datapath + 'City_of_London.xlsx'
-    task = Task5(infoPageName)
-    task.run()
+    urllist = ['https://www.planning2.cityoflondon.gov.uk/online-applications/search.do?action=advanced',
+    'https://publicaccess.barnet.gov.uk/online-applications/search.do?action=advanced',
+    'https://pa.brent.gov.uk/online-applications/search.do?action=advanced&searchType=Application',
+    'https://publicaccess3.croydon.gov.uk/online-applications/search.do?action=advanced',
+    'https://planning.lewisham.gov.uk/online-applications/search.do?action=advanced',
+    'https://development.towerhamlets.gov.uk/online-applications/search.do?action=advanced',
+    'https://planning.royalgreenwich.gov.uk/online-applications/search.do?action=advanced',
+    'https://publicaccess.kingston.gov.uk/online-applications/search.do?action=advanced',
+    'https://idoxpa.westminster.gov.uk/online-applications/search.do?action=advanced'
+    ]
+    councillist = ['City_of_London',
+        'London_Borough_of_Barnet',
+        'London_Borough_of_Brent',
+        'London_Borough_of_Croydon',
+        'London_Borough_of_Lewisham',
+        'London_Borough_of_Tower_Hamlets',
+        'Royal_Borough_of_Greenwich',
+        'Royal_Borough_of_Kingston_upon_Thames',
+        'Westminster_City_Council'
+    ]
+    # urllist = [
+    # 'https://development.towerhamlets.gov.uk/online-applications/search.do?action=advanced'
+    # ]
+    # councillist = [
+    #     'London_Borough_of_Tower_Hamlets'
+    # ]
+    for i in range(0, len(urllist)):
+        try: 
+            infoPageName = datapath + councillist[i] + '.xlsx'
+            url = urllist[i]
+            task = Task5(infoPageName)
+            task.run(url,councillist[i])
+        except Exception as exc:
+            print(exc)
+            
