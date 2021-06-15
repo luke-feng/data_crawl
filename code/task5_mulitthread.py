@@ -63,6 +63,35 @@ class Task5:
         self.workers = [self.driver1, self.driver2,
                         self.driver3, self.driver4, self.driver5,self.driver6, self.driver7,
                         self.driver8, self.driver9, self.driver10]
+    
+    def get_search_results_page(self, url, qstart, qend):
+        print(qstart, qend)
+        while True:
+            self.driver.get(url)
+            fromdates = self.driver.find_elements_by_id(
+            'applicationReceivedStart')
+            if len(fromdates)>0:
+                fromdate = self.driver.find_element_by_id(
+                    'applicationReceivedStart')
+                fromdate.send_keys(qstart)
+                enddate = self.driver.find_element_by_id(
+                    'applicationReceivedEnd')
+                enddate.send_keys(qend)
+                self.driver.find_element_by_css_selector(
+                    '#advancedSearchForm > div.buttons > input.button.primary').click()
+                self.driver.get(self.driver.current_url)
+                resultsPerPages = self.driver.find_elements_by_id(
+                    'resultsPerPage')
+                if len(resultsPerPages)>0:
+                    resultsPerPage = self.driver.find_element_by_id(
+                        'resultsPerPage')
+                    s1 = Select(resultsPerPage)
+                    s1.select_by_value('100')
+                    self.driver.find_element_by_css_selector('#searchResults > input.button.primary').click()
+                    searchResults = self.driver.find_elements_by_class_name(
+                    'searchresult')
+                    return searchResults
+
 
     def run(self, url, council):
         startday = ['01/01', '01/02', '01/03', '01/04', '01/05', '01/06',
@@ -103,37 +132,7 @@ class Task5:
             for mon in range(0, 1):
                 qstart = startday[mon]+'/'+str(year)
                 qend = endday[mon]+'/'+str(year)
-                print(qstart, qend)
-                self.driver.get(url)
-                Wait(self.driver, 10).until(
-                    Expect.presence_of_element_located(
-                        (By.CSS_SELECTOR, '#advancedSearchForm > div.buttons > input.button.primary'))
-                )
-                fromdate = self.driver.find_element_by_id(
-                    'applicationReceivedStart')
-                fromdate.send_keys(qstart)
-                enddate = self.driver.find_element_by_id(
-                    'applicationReceivedEnd')
-                enddate.send_keys(qend)
-                self.driver.find_element_by_css_selector(
-                    '#advancedSearchForm > div.buttons > input.button.primary').click()
-                self.driver.get(self.driver.current_url)
-                # try:
-                #     Wait(self.driver, 10).until(
-                #         Expect.presence_of_element_located(
-                #             (By.ID, 'resultsPerPage'))
-                #     )
-                # except Exception as exc:
-                #     print(qstart, qend, exc)
-                resultsPerPage = self.driver.find_element_by_id(
-                    'resultsPerPage')
-                s1 = Select(resultsPerPage)
-                s1.select_by_value('100')
-                self.driver.find_element_by_css_selector('#searchResults > input.button.primary').click()
-                # browser.get(browser.current_url)
-                searchResults = self.driver.find_elements_by_class_name(
-                    'searchresult')
-
+                searchResults = self.get_search_results_page(url, qstart, qend)
                 while True:
                     next = self.driver.find_elements_by_class_name('next')
                     if len(next) > 0:
