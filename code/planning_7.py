@@ -138,12 +138,6 @@ class Task5:
                         self.driver15,
                         ]
     
-    def get_proxyList(self):
-        url = 'http://dps.kdlapi.com/api/getdps/?orderid=901955512630336&num=1&pt=1&sep=1'
-        resp = requests.get(url)
-        json_data = resp.json()
-        proxylist = json_data['data']['proxy_list']
-        return proxylist
 
     def read_all_links(self, linkpath):
         links =pd.read_csv(linkpath, index_col=None, header=None, engine='python' , error_bad_lines=False).values
@@ -158,7 +152,6 @@ class Task5:
 
 
     def run(self, url, council):
-
         for driver in self.workers:
             self.click_cookie( url, driver)
 
@@ -242,8 +235,12 @@ class Task5:
 
     def get_details(self, browser, url):
         details = []
-        time.sleep(1)
         browser.get(url)
+        databaseerror = browser.find_elements_by_xpath('//*[@id="labelPageHeading"]')
+        if len(databaseerror) > 0:
+            print('databaseerror')
+            time.sleep(3600)
+            browser.get(url)
         cookie = browser.find_elements_by_xpath('/html/body/main/div/div[1]/article/form/div[3]/p[3]/input')
         if len(cookie) > 0:
             print(cookie[0].get_attribute('value'))

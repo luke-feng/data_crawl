@@ -30,16 +30,42 @@ from random import randint
 # json_data = resp.text
 # print(json_data)
 
-PROXY = '193.149.225.9:80'
-chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
-chrome_options = Options()
-chrome_options.add_argument("--log-level=OFF")
-chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--proxy-server={}'.format(PROXY))
-driver = webdriver.Chrome(
-    executable_path=chrome_path, options=chrome_options)
+datapath = 'D:/git/data_crawl/raw_data/gazette/'
+# with open(datapath+'proxy.text','r')as pf:
+#     for line in pf:
+#         PROXY = line.split('#')[0]
+#         try:
+#             chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
+#             chrome_options = Options()
+#             chrome_options.add_argument("--log-level=OFF")
+#             chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+#             chrome_options.add_argument('--headless')
+#             chrome_options.add_argument('--proxy-server={}'.format(PROXY))
+#             driver = webdriver.Chrome(
+#                 executable_path=chrome_path, options=chrome_options)
 
-driver.get('https://www.google.com')
-print(driver.page_source)
-driver.close()
+#             driver.get('https://www.google.com')
+#             print(PROXY)
+#             driver.close()
+#         except:
+#             continue
+pl = ['3.10.251.232:80'
+]
+for line in pl:
+    PROXY = line.split('#')[0]
+    try:
+        chrome_path = 'C:/Program Files/Google/Chrome/Application/chromedriver.exe'
+        chrome_options = Options()
+        chrome_options.add_argument("--log-level=OFF")
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('--proxy-server={}'.format(PROXY))
+        driver = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+
+        driver.get('https://planning-lbhounslow.msappproxy.net/Planning_CaseNo.aspx?strCASENO=P/2002/1223')
+        time.sleep(10)
+        print(driver.page_source)
+        driver.close()
+    except:
+        continue

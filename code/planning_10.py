@@ -74,13 +74,13 @@ class Task5:
         last = datetime.date(2020,12,31)
         qend = qstart
         while qend < last:
-            qend = qstart + datetime.timedelta(days=30)
+            qend = qstart + datetime.timedelta(days=100)
             if qend >= last:
                 qend = last
             # par = tqdm.tqdm(ncols=100)
             sstart = qstart.strftime("%Y-%m-%d")
             send = qend.strftime("%Y-%m-%d")
-            qstart = qstart + datetime.timedelta(days=31) 
+            qstart = qstart + datetime.timedelta(days=101) 
             url_q = 'https://planningapi.agileapplications.co.uk/api/application/search?decisionDateFrom={}&decisionDateTo={}'.format(sstart, send)
             page = requests.get(url_q,verify=False, headers=self.header).json()
             print(council, sstart, send)
@@ -101,9 +101,12 @@ class Task5:
         par = tqdm.tqdm(total = len(self.finalResult), ncols=100)
         for data in self.finalResult:
             par.update(1)
-            for col in range(1, len(data)+1):
-                self.sheet1.cell(self.line+2, col).value = data[col-1]            
-            self.line += 1
+            try:
+                for col in range(1, len(data)+1):
+                    self.sheet1.cell(self.line+2, col).value = data[col-1]            
+                self.line += 1
+            except:
+                continue
         self.xlsFile.save(self.resultPath)
         par.close()
         self.xlsFile.close()
