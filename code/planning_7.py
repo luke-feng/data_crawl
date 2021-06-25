@@ -79,12 +79,6 @@ def get_all_links():
     driver.close()
     linkfile.close()
 
-
-
-
-
-
-
 class Task5:
     def __init__(self, resultPath, chrome_path, linkPath):
         self.finalResult = []
@@ -96,41 +90,61 @@ class Task5:
         self.line = 0
         self.xlsFile = openpyxl.Workbook()
         self.sheet1 = self.xlsFile.create_sheet(index=0)
-        self.max_workers = 1
+        self.max_workers = 16
         self.k = []
         self.executor = ThreadPoolExecutor(max_workers=self.max_workers)
         # for main thread
         self.driver = webdriver.Chrome(
             executable_path=chrome_path, options=chrome_options)
         # for workers
-        # self.driver1 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver2 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver3 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver4 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver5 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver6 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver7 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver8 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver9 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        # self.driver10 = webdriver.Chrome(
-        #     executable_path=chrome_path, options=chrome_options)
-        self.workers = [self.driver
-                        # , self.driver1, self.driver2,
-                        # self.driver3, self.driver4, 
-                        # self.driver5,
-                        # self.driver6, self.driver7, self.driver8, 
-                        # self.driver9, self.driver10
+        self.driver1 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver2 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver3 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver4 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver5 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver6 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver7 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver8 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver9 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver10 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver11 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver12 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver13 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver14 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.driver15 = webdriver.Chrome(
+            executable_path=chrome_path, options=chrome_options)
+        self.workers = [self.driver,
+                        self.driver1, self.driver2,
+                        self.driver3, self.driver4, 
+                        self.driver5,
+                        self.driver6, self.driver7, self.driver8, 
+                        self.driver9, self.driver10,
+                        self.driver11, self.driver12,
+                        self.driver13, self.driver14, 
+                        self.driver15,
                         ]
     
+    def get_proxyList(self):
+        url = 'http://dps.kdlapi.com/api/getdps/?orderid=901955512630336&num=1&pt=1&sep=1'
+        resp = requests.get(url)
+        json_data = resp.json()
+        proxylist = json_data['data']['proxy_list']
+        return proxylist
+
     def read_all_links(self, linkpath):
         links =pd.read_csv(linkpath, index_col=None, header=None, engine='python' , error_bad_lines=False).values
         return links
@@ -138,16 +152,9 @@ class Task5:
     def click_cookie(self, url, driver):
         driver.get(url)
         cookie = driver.find_elements_by_xpath('/html/body/main/div/div[1]/article/form/div[3]/p[3]/input')
-        print('cookie', len(cookie))
-        if len(cookie) > 0:
-            print(cookie[0].get_attribute('value'))
-            cookie[0].click()
-        else:
-            driver.get(url)
-            cookie = driver.find_elements_by_xpath('/html/body/main/div/div[1]/article/form/div[3]/p[3]/input')
-            print('cookie', len(cookie))
-            print(cookie[0].get_attribute('value'))
-            cookie[0].click()
+        # print('cookie', len(cookie))
+        print(cookie[0].get_attribute('value'))
+        cookie[0].click()
 
 
     def run(self, url, council):
@@ -168,17 +175,27 @@ class Task5:
         start = []
         end = []
         par = tqdm.tqdm(total = len(urls), ncols=100)
+        
         for i in range(0, len(urls), self.max_workers):
             start.append(i)
             if i + self.max_workers >= len(urls):
                 end.append(len(urls))
             else:
                 end.append(i+self.max_workers)
+        t1 = time.time()
         for i, s in enumerate(start):
             try: 
-                par.update(self.max_workers)
+                
                 self.asyn_page(
                     url_list=urls[start[i]: end[i]], council=council)
+                t2 = time.time()
+                par.update(self.max_workers)
+                steps = t2 - t1
+                if steps >= 3600:
+                    t1 = time.time()
+                    for driver in self.workers:
+                        self.click_cookie( url, driver)
+                
             except Exception as exc:
                 print(exc)
                 continue   
@@ -195,16 +212,21 @@ class Task5:
 
     def __del__(self):
         self.driver.close()
-        # self.driver1.close()
-        # self.driver2.close()
-        # self.driver3.close()
-        # self.driver4.close()
-        # self.driver5.close()
-        # self.driver6.close()
-        # self.driver7.close()
-        # self.driver8.close()
-        # self.driver9.close()
-        # self.driver10.close()
+        self.driver1.close()
+        self.driver2.close()
+        self.driver3.close()
+        self.driver4.close()
+        self.driver5.close()
+        self.driver6.close()
+        self.driver7.close()
+        self.driver8.close()
+        self.driver9.close()
+        self.driver10.close()
+        self.driver11.close()
+        self.driver12.close()
+        self.driver13.close()
+        self.driver14.close()
+        self.driver15.close()
         print('>>>>[Well Done]')
 
     def get_information(self, browser, result, council):
@@ -220,11 +242,22 @@ class Task5:
 
     def get_details(self, browser, url):
         details = []
+        time.sleep(1)
         browser.get(url)
-        Addresses =browser.find_elements_by_id('MainContent_lbl_site_description')
-        if len(Addresses) ==  0:
-            self.click_cookie(url, browser)
+        cookie = browser.find_elements_by_xpath('/html/body/main/div/div[1]/article/form/div[3]/p[3]/input')
+        if len(cookie) > 0:
+            print(cookie[0].get_attribute('value'))
+            cookie[0].click()
             browser.get(url)
+        i = 0
+        while i <= 10:
+            i += 1
+            time.sleep(1)
+            Addresses =browser.find_elements_by_id('MainContent_lbl_site_description')
+            if len(Addresses) >  0:
+                break
+            else:
+                browser.get(url)
         Application_Type=''
         Status=''
         Date=''

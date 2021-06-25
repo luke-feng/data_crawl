@@ -163,7 +163,7 @@ class Task5:
             # par = tqdm.tqdm(ncols=100)
             sstart = qstart.strftime("%d/%m/%Y")
             send = qend.strftime("%d/%m/%Y")
-            qstart = qstart + datetime.timedelta(days=10)  
+            qstart = qstart + datetime.timedelta(days=31)  
             self.get_search_results_page(url, sstart, send, council)
             par = tqdm.tqdm(ncols=100)
 
